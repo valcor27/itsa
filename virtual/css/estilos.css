@@ -1,0 +1,455 @@
+*{
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	box-sizing: border-box;
+}
+body{
+	background: #EAEAEA;
+}
+html{
+	scroll-behavior: smooth;
+	-webkit-transition: all 2s;
+	-moz-transition: all 2s;
+	-ms-transition: all 2s;
+	-o-transition: all 2s;
+	transition: all 2s;
+}
+.btn.disabled,
+.btn.disabled:hover,
+.btn.disabled:focus,
+.btn.disabled.focus,
+.btn.disabled:active,
+.btn.disabled.active,
+.btn:disabled,
+.btn:disabled:hover,
+.btn:disabled:focus,
+.btn:disabled.focus,
+.btn:disabled:active,
+.btn:disabled.active,
+.btn[disabled],
+.btn[disabled]:hover,
+.btn[disabled]:focus,
+.btn[disabled].focus,
+.btn[disabled]:active,
+.btn[disabled].active,
+fieldset[disabled] .btn,
+fieldset[disabled] .btn:hover,
+fieldset[disabled] .btn:focus,
+fieldset[disabled] .btn.focus,
+fieldset[disabled] .btn:active,
+fieldset[disabled] .btn.active,
+.form-control:disabled{
+    cursor: not-allowed;
+}
+
+.custom-tooltip {
+	--bs-tooltip-bg: #991416 !important;
+	--bs-tooltip-color: var(--bs-white);
+  }
+  
+/*---------------------------------------*/
+/*------------------Menu de navegacion------------------*/
+.navbar{
+	background-color: #fff;
+}
+.navbar .navbar-brand img{
+	max-width: 150px;
+	max-height: 90px;
+}
+.navbar .navbar-nav  .nav-item{
+	text-transform: uppercase;
+}
+.navbar .navbar-nav .nav-item .nav-link{
+	color: #7F7F7F;
+}
+/*--------------------------------------------*/
+/*---------------------slider------------------*/
+.carousel .carousel-inner .carousel-item img{
+	width: 100%;
+	height: 512px;
+}
+.carousel-caption{
+	bottom: 220px;
+}
+.carousel-caption h5{
+	font-size: 40px;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	margin-top: 25px;
+
+}
+.carousel-caption p{
+	width: 60%;
+	margin: auto;
+	font-size: 18px;
+	line-height: 1.9;
+
+}
+/*-----------------------Responsive slider----------*/
+
+@media (max-width: 575px) {
+	/* Bump up size of carousel content */
+	.carousel-caption h5{
+		font-size: 1.25rem;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		margin-top: 25px;
+
+	}
+}
+/*--------------------------------------------*/
+/*---------------Estilos de modales--------------*/
+.modal-header{
+	background-color: #991416;
+}
+.modal-title{
+	color: #f8f8f8;
+}
+.input-group-text{
+	background: #991416 !important;
+	color: #F8F8F8;
+}
+/*-----------------------------------------------*/
+/*-------------ASIDE------------------------*/
+.offcanvas-menu{
+	width: 304px !important;
+}
+.offcanvas-title img{
+	max-width: 150px;
+	max-height: 90px;
+}
+.list-header{
+	font-size: .88em;
+	font-weight: 700;
+	color: #991416;
+}
+.list-divider{
+	margin: 17px 0 15px;
+	border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.list-divider-sdd{
+	margin: 17px 0 15px;
+	border-bottom: 1px solid #991416;
+}
+.nav-offcanvas .navbar-nav .nav-item .nav-link{
+	margin: 1px 5px;
+	padding-left: 13px;
+	padding-right: 13px;
+	border-radius: 3px;
+	font-weight: 600;
+	color: #6b737c;
+	border-radius: 10px;
+}
+.nav-offcanvas .navbar-nav .nav-item .nav-link:hover{
+	background-color: #A6A6A6;
+	color: #fff;
+}
+.nav-offcanvas .navbar-nav .nav-item .nav-link.active{
+	color: #fff;
+	background-color: #991416;
+}
+/*-----------------------------------------------*/
+/*------footer----*/
+.icon-footer{
+	color: #E83874;
+}
+.a-footer{
+	text-decoration: none;
+	color: #991416;
+}
+.a-footer:hover{
+	color: #660D19;
+}
+/*----------------*/
+/*--navbar de la plataforma nombre del usuario--*/
+.dropdown-user{
+	color: #6b737c;
+}
+.btn-outline-menu{
+	background-color: #fff;
+	color: #991416;
+	border-color: #991416;
+}
+.btn-outline-menu:hover{
+	background-color: #991416 !important;
+	color: #fff !important;
+	border-color: #660D19 !important;
+}
+/*----------------------------------------------*/
+/*------------------estilos card de modulos------*/
+.z-index-2 {
+	z-index: 2 !important;
+}
+.p-0 {
+	padding: 0 !important;
+}
+.mt-n4 {
+	margin-top: -1.5rem !important;
+}
+.mx-3 {
+	margin-right: 1rem !important;
+	margin-left: 1rem !important;
+}
+.position-relative {
+	position: relative !important;
+}
+.border-radius-lg {
+	border-radius: 1rem;
+}
+.bg-gradient-primary {
+	background-image: linear-gradient(195deg, #991426 0%, #660D19 100%);
+}
+.shadow-primary {
+	box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0.09, 0.35, 0.37, 0.4) !important;
+}
+/*------------------------------------------------------------------*/
+/*----------------------titulo de cada modulo------------------------*/ 
+#contenido_pagina .title-pagina{
+	font-weight: 600;
+	text-transform: uppercase;
+}
+/*-----------------------------------------------------------------*/
+/*------------------btn outline warning and light----------------------*/
+.btn-warning,
+.btn-info{
+	color: #fff !important;
+}
+.btn-outline-light:hover{
+	color: #991426 !important;}
+/*-------------------------------------------------------------*/
+/*-----------------estilo paginacion----------------------------*/
+.card-footer .pagination .page-item .page-link{
+	color: #991416;
+}
+.card-footer .pagination .page-item.active .page-link{
+	background-color: #991426 !important;
+	border-color: #660D19 !important;
+	color: #fff !important;
+}
+.card-footer .pagination .page-item.disabled .page-link{
+	color: #6C757D;
+}
+
+/*--------------------------------------------------------------*/
+/**--------------------estilos card de dash--------------------*/
+.flex-fill {
+	flex: 1 1 auto !important;
+}
+.card-title {
+	font-size: .95rem;
+	font-weight: 500;
+	color: #495057;
+}
+.stat-sm {
+	width: 40px;
+	height: 40px;
+	padding: .625rem;
+}
+.stat {
+	background: #e0eafc;
+	border-radius: 50%;
+	padding: .75rem;
+	width: 48px;
+	height: 48px;
+}
+.stat-sm .icon-dash{
+	width: 20px;
+	height: 20px;
+}
+.stat .icon-dash{
+	width: 24px;
+	height: 24px;
+	color: #3f80ea !important;
+}
+.mb-4 {
+	margin-bottom: 1.5rem !important;
+}
+.mt-1 {
+	margin-top: .25rem !important;
+}
+.d-inline-block {
+	display: inline-block !important;
+}
+h1, .h1 {
+	font-size: 1.65rem;
+}
+.h1 {
+	margin-top: 0;
+	margin-bottom: .5rem;
+	font-weight: 500;
+	line-height: 1.2;
+	color: #495057;
+}
+.badge-soft-success {
+	color: color-yiq(rgba(75,191,115,.175));
+	background-color: #4bbf732d;
+	color: #4bbf73;
+}
+.card {
+	max-height: 100%;
+	margin-bottom: 24px;
+	box-shadow: 0 0 .875rem #2930420d;
+}
+.text-bg-warning{
+	color: #fff !important;
+}
+/*-------------------------------------------------------------*/  
+/*----Contenido pagina---*/
+#contenido_pagina .title-pagina{
+	color: #991426;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+/*-----------------------*/
+/*formato de imagen home*/
+.img-home{
+	width: 100%;
+	height: 65vh;
+}
+.home-card{
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	text-align: center;
+	padding: 0 15px;
+	color: #fff;
+	font-size: 15px;
+}
+.home-card h5{
+	color: #fff;
+	font-size: 40px;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	margin-top: 25px;
+}
+.home-card p{
+	width: 60%;
+	font-size: 18px;
+	line-height: 1.9;
+
+}
+/*----------------*/
+/* styles.css 
+.instagram-button {
+    display: inline-block;
+    background: linear-gradient(45deg, #833ab4, #e1306c);
+    color: #fff;
+}
+
+.instagram-button:hover {
+    background: linear-gradient(45deg, #e1306c, #833ab4);
+}*/
+/* Agrega estilos para la imagen */
+.image-container {
+	width: 100%;
+	height: 65vh;
+    position: relative;
+    display: inline-block;
+}
+
+.image-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Color oscuro con opacidad */
+    pointer-events: none; /* Evita que el pseudo-elemento afecte los clics */
+    opacity: 1; /* Ajusta la opacidad según sea necesario */
+    transition: opacity 0.3s ease; /* Agrega una transición suave */
+}
+
+.redes .fb .reicon{
+	color: #3b5998; 
+}
+.redes .fb:hover{
+	background: #3b5998; 
+}
+.redes .ins .reicon{
+	color: #e1306c;
+}
+.redes .ins:hover{
+	background: linear-gradient(45deg, #e1306c, #833ab4);
+}
+.redes .x .reicon{
+	color: #1D9BF0; 
+}
+.redes .x:hover{
+	background: #1D9BF0; 
+}
+.redes .fb:hover .reicon,
+.redes .ins:hover .reicon,
+.redes .x:hover .reicon{
+	color: #fff;
+}
+.redes a{
+	display: inline-block;
+	background: transparent;
+	width: 40px;
+	height: 40px;
+	-moz-border-radius:10%;
+	-webkit-border-radius:10%;
+	-o-border-radius:10%;
+	border-radius:10%;
+	position: relative;
+}
+.redes a .reicon{
+	font-size: 25px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -12px;
+	margin-top: -12px;
+}
+.redes a:hover .reicon, .triggeredHover{
+	-moz-transform: rotate(360deg);
+	-webkit-transform: rotate(360deg);
+	-ms--transform: rotate(360deg);
+	transform: rotate(360deg);
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	-ms-transition: all 0.2s;
+	transition: all 0.2s;
+}
+
+.redes .reicon{
+	-webkit-transition: all 0.8s;
+	-moz-transition: all 0.8s;
+	-o-transition: all 0.8s;
+	-ms-transition: all 0.8s;
+	transition: all 0.8s;
+}
+/*Estilos de carga academicas*/
+.datos_docente{
+	color: #fff;
+}
+/*configuracion de tabla horario*/
+.ic_materia{
+	color: #457D9D;
+	cursor: pointer;
+	font-size: 30px;
+}
+#mi-tabla td >.l_materia{
+	color: #fff;
+	width: 100px;
+	height: 30px;
+	background: #457D9D;
+	cursor: pointer;
+}
+#mi-tabla td>.l_materia_vacio{
+	color: #222;
+	width: 100px;
+	height: 30px;
+	cursor: pointer;
+}
