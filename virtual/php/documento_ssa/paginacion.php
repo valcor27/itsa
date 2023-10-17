@@ -7,19 +7,26 @@ $paginaActual = $_POST['partida'];
 $dato = $_POST['dato'];
 $ideliminar = $_POST['ideliminar'];
 $idaceptar = $_POST['idaceptar'];
+date_default_timezone_set('America/Mexico_City');
+$fecha = date('Y-m-d');
+$usuario = $id_software_sesion;
+$movimiento_cancelar = "Cancelado";
+$movimiento_aceptar = "Aceptado";
 
 $dato=sanear_normal($dato);
 
 /*-----Verificación de eliminar---------------------------------------------------------------------------------*/
 if($ideliminar > 0){
-  $eliminar="UPDATE documentos SET estatus='0' WHERE id_documento='$ideliminar' LIMIT 1";
+  $eliminar="UPDATE documentos SET estatus='0', fecha_movimiento = '$fecha', ultimo_movimiento = '$movimiento_cancelar', 
+  usuario_movimiento = '$usuario' WHERE id_documento='$ideliminar' LIMIT 1";
   $resultado_elimina=mysqli_query($conexion_database, $eliminar);
 }
 /*--------------------------------------------------------------------------------------------------------------*/
 
 /**---------------------------Verificacion de aceptar documento------------- */
 if($idaceptar > 0){
-    $aceptar = "UPDATE documentos SET estatus = '2' WHERE id_documento = '$idaceptar' LIMIT 1";
+    $aceptar = "UPDATE documentos SET estatus = '2', fecha_movimiento = '$fecha', ultimo_movimiento = '$movimiento_aceptar', 
+    usuario_movimiento = '$usuario' WHERE id_documento = '$idaceptar' LIMIT 1";
     $resultado_acepta = mysqli_query($conexion_database, $aceptar);
 }
 /**------------------------------------------------------------------------- */
