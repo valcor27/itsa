@@ -16,6 +16,9 @@
     $estatus = 1;
     $comprobacion = "0";
     $id_domicilio = '';
+    date_default_timezone_set('America/Mexico_City');
+    $fecha = date('Y-m-d');
+    $usuario = $id_software_sesion;
     $calle = sanear_string($calle);
     $colonia = sanear_string($colonia);
     $localidad = sanear_string($localidad);
@@ -53,10 +56,11 @@
                 /***------------Insertamos los datos si no se duplican------------- */
                 $inserta = "INSERT INTO domicilio(calle, n_Ext, nInt,
                 colonia, cp, localidad, municipio_idMunicipio, municipio_nombreMunicipio,
-                estado_idEstado, estado_nombreEstado, empleado_expediente, estatus)values('$calle', 
+                estado_idEstado, estado_nombreEstado, empleado_expediente, estatus, fecha_movimiento,
+                ultimo_movimiento, usuario_movimiento)values('$calle', 
                 '$exterior', '$interior', '$colonia', '$cp', '$localidad',
                 '$municipio', '$nombre_municipio', '$estado', '$nombre_estado', 
-                '$expediente', '$estatus')";
+                '$expediente', '$estatus', '$fecha', '$proceso', '$usuario')";
                 $proceso = mysqli_query($conexion_database, $inserta);
                 /**----------------------------------------------------------------- */
                 /**-----------Obtener id de domicilio------------------------------- */
@@ -87,8 +91,8 @@
                 $actualiza = "UPDATE domicilio SET calle = '$calle', n_Ext = '$exterior', 
                 nInt = '$interior', colonia = '$colonia',cp = '$cp', localidad = '$localidad', 
                 municipio_idMunicipio = '$municipio', municipio_nombreMunicipio = '$nombre_municipio', 
-                estado_idEstado = '$estado', estado_nombreEstado = '$nombre_estado' 
-                WHERE idDomicilio = '$id' AND empleado_expediente = '$expediente' LIMIT 1";
+                estado_idEstado = '$estado', estado_nombreEstado = '$nombre_estado', fecha_movimiento = '$fecha', 
+                ultimo_movimiento = '$proceso', usuario_movimiento = '$usuario' WHERE idDomicilio = '$id' AND empleado_expediente = '$expediente' LIMIT 1";
                 $resultado_actualiza = mysqli_query($conexion_database, $actualiza);
             }else{
                 $comprobacion = "1";

@@ -6,12 +6,15 @@
 	$paginaActual = $_POST['partida'];
   $dato = $_POST['dato'];
   $ideliminar = $_POST['ideliminar'];
-
+  date_default_timezone_set('America/Mexico_City');
+  $fecha = date('Y-m-d');
+  $usuario = $id_software_sesion;
   $dato=sanear_normal($dato);
+  $proceso = "Eliminacion";
 
   /*-----Verificación de eliminar---------------------------------------------------------------------------------*/
     if($ideliminar > 0){
-      $eliminar="UPDATE empleados SET estatus='0' WHERE expediente='$ideliminar' LIMIT 1";
+      $eliminar="UPDATE empleados SET estatus='0' WHERE expediente='$ideliminar', fecha_movimiento='$fecha', ultimo_movimiento='$proceso', usuario_movimiento='$usuario' LIMIT 1";
       $resultado_elimina=mysqli_query($conexion_database, $eliminar);
     }
   /*--------------------------------------------------------------------------------------------------------------*/

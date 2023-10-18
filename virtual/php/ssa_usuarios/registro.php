@@ -22,6 +22,9 @@
     $reportada = $_POST["unidadReportada_usuario"];
     $estatus = 1;
     $comprobacion = "0";
+    date_default_timezone_set('America/Mexico_City');
+    $fecha = date('Y-m-d');
+    $usuario = $id_software_sesion;
     
     $nombre = sanear_string($nombre);
     $apepat = sanear_string($apepat);
@@ -82,9 +85,10 @@
                 $inserta = "INSERT INTO empleados(expediente, primerApellido, segundoApellido, nombres, sexo, 
                 fNaci, rfc, curp, contrasena, celular, mailP, mailI, fAlta, nivel_idNivelUsuario, plaza_codigoPlaza, 
                 plaza_nombrePlaza, estructuraReportada, reportada_nombreUnidad, estructuraReal, real_nombreUnidad, 
-                estatus)values('$expediente','$apepat','$apemat','$nombre','$sexo','$fecha_nacimiento','$rfc','$curp','$contrasena',
+                estatus, fecha_movimiento, ultimo_movimiento, usuario_movimiento)values('$expediente','$apepat',
+                '$apemat','$nombre','$sexo','$fecha_nacimiento','$rfc','$curp','$contrasena',
                 '$cel','$emailp','$emaili','$fecha_alta','$nivel','$plaza','$nombre_plaza','$reportada','$nombre_reportada',
-                '$real','$nombre_real','$estatus')";
+                '$real','$nombre_real','$estatus','$fecha','$proceso','$usuario')";
                 $proceso=mysqli_query($conexion_database, $inserta);
             }else{
                 $comprobacion = "1";
@@ -105,7 +109,8 @@
                 fNaci = '$fecha_nacimiento', rfc = '$rfc', curp = '$curp', contrasena = '$contrasena', celular = '$cel', mailP = '$emailp', 
                 mailI = '$emaili', fAlta = '$fecha_alta', nivel_idNivelUsuario = '$nivel', plaza_codigoPlaza = '$plaza', 
                 plaza_nombrePlaza = '$nombre_plaza', estructuraReportada = '$reportada', reportada_nombreUnidad = '$nombre_reportada',
-                estructuraReal = '$real', real_nombreUnidad = '$nombre_real' WHERE expediente='$expediente' LIMIT 1";
+                estructuraReal = '$real', real_nombreUnidad = '$nombre_real', fecha_movimiento = '$fecha', 
+                ultimo_movimiento = '$proceso', usuario_movimiento = '$usuario' WHERE expediente = '$expediente' LIMIT 1";
                 $resultado_actualiza = mysqli_query($conexion_database, $actualiza);
             }else{
                 $comprobacion = "1";
