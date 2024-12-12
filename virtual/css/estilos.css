@@ -88,6 +88,13 @@ fieldset[disabled] .btn.active,
 	line-height: 1.9;
 
 }
+/*---------Logo del index----*/
+.logo-index{
+	max-width: 200px;
+	max-height: 90px;
+}
+/**--------------------------*/
+
 /*-----------------------Responsive slider----------*/
 
 @media (max-width: 575px) {
@@ -152,6 +159,25 @@ fieldset[disabled] .btn.active,
 	background-color: #991416;
 }
 /*-----------------------------------------------*/
+/*------Estilos del detalle de asistencia--------*/
+.nav-pills .nav-link{
+	margin: 1px 5px;
+	padding-left: 13px;
+	padding-right: 13px;
+	border-radius: 3px;
+	font-weight: 600;
+	color: #6b737c;
+	border-radius: 10px;
+}
+.nav-pills .nav-link:hover{
+	background-color: #A6A6A6 !important;
+	color: #fff !important;
+}
+.nav-pills .nav-link.active{
+	color: #fff !important;
+	background-color: #991416 !important;
+}
+/**----------------------------------------------*/
 /*------footer----*/
 .icon-footer{
 	color: #E83874;
@@ -295,6 +321,7 @@ h1, .h1 {
 }
 .text-bg-warning{
 	color: #fff !important;
+	background-color: #E3AD08 !important;
 }
 /*-------------------------------------------------------------*/  
 /*----Contenido pagina---*/
@@ -431,7 +458,9 @@ h1, .h1 {
 	transition: all 0.8s;
 }
 /*Estilos de carga academicas*/
-.datos_docente{
+.datos_docente,
+.datos_quincena,
+.datos_detalle_pago{
 	color: #fff;
 }
 /*configuracion de tabla horario*/
@@ -452,4 +481,169 @@ h1, .h1 {
 	width: 100px;
 	height: 30px;
 	cursor: pointer;
+}
+/**-----Menu de notificaciones y acomo de nombre de usuario*/
+.lado-right{
+	align-items: center;
+	display: flex;
+	margin-left: auto;
+}
+.lado-dots{
+	margin-left: auto;
+	display: flex;
+}
+
+.lado-btn-lg {
+	padding: 0 0 0 1.5rem;
+	padding-right: 0px;
+	margin-left: 1.5rem;
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+.lado-btn-lg::before {
+	position: absolute;
+	left: -1px;
+	top: 50%;
+	background: #dee2e6;
+	width: 1px;
+	height: 30px;
+	margin-top: -15px;
+	content: '';
+}
+.btn-notificaciones{
+  	border-radius: 40px;
+}
+
+/* Estilo para quitar la flecha en dropdown con clase sin-flecha */
+.dropdown-toggle.sin-flecha::after {
+	content: none; /* Elimina el contenido de ::after, es decir, la flecha */
+}
+.rounded-cricle{
+	border-radius: 50% !important;
+}
+/* Estilos para el menú desplegable de notificaciones */
+#dropdown-notificaciones {
+    width: 300px !important; /* Establece una altura máxima para el menú */
+    /*overflow-y: auto; /* Agrega desplazamiento vertical si es necesario */
+}
+
+.dropdown-item {
+    padding: 10px; /* Ajusta el espaciado interno de los elementos de notificación */
+}
+
+.dropdown-item img {
+    max-width: 32px; /* Establece un ancho máximo para las imágenes */
+    border-radius: 50%; /* Hace que las imágenes sean redondas */
+}
+
+/* Opcional: Estilos para el encabezado del menú de notificaciones */
+.dropdown-header {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    padding: 5px 10px;
+    color: #333;
+}
+.folio-notificaciones{
+	font-size: 13px;
+}
+.mensaje-notificaciones{
+	font-size: 12px;
+}
+.fecha-notificaciones{
+	font-size: 10px;;
+}
+/* Aplica estilos personalizados para pantallas grandes (lg y superiores) */
+@media (min-width: 992px) {
+    .navbar-brand {
+        display: block; /* Muestra el logo en pantallas grandes */
+    }
+}
+
+/* Aplica estilos personalizados para pantallas más pequeñas que lg */
+@media (max-width: 991px) {
+    .navbar-brand {
+        display: none; /* Oculta el logo en pantallas más pequeñas */
+    }
+}
+.dropdown-header{
+	text-transform: uppercase;
+	font-size: 12px !important;
+	color: #314F66;
+	/*font-weight: 400;*/
+}
+/* Estilo general para el select */
+#buscar_detalle_pago > select {
+    width: 100%;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    font-size: 14px;
+}
+
+/* Estilo de separación entre los grupos */
+/*.outgroup_divider_me {
+    height: 0;
+    margin: .5rem 0;
+    overflow: hidden;
+    border-top: 1px solid #e9ecef; /* Línea de separación */
+/*}
+
+/* Estilo para el título del grupo */
+/*.outgroup_title_me {
+    display: block; /* Asegúrate de que se muestre como bloque */
+    /*padding: .5rem 1.5rem; /* Espaciado interno */
+   /* margin-bottom: 0;
+    font-size: .875rem; /* Tamaño de letra */
+   /* color: #6c757d; /* Color del texto */
+   /* white-space: nowrap; /* Evitar el salto de línea */
+/*}
+/*estilos para página de mantenimiento*/
+#mantenimiento{
+	height: 100%;
+	margin: 0;
+	font-family: 'Arial', sans-serif;
+	background-color: #f8f9fa;
+}
+.maintenance-container{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	text-align: center;
+	background-color: #f8f9fa;
+}
+.maintenance-box{
+	background: white;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	padding: 50px;
+}
+.maintenance-box h1{
+	font-size: 3rem;
+	color: #343a40;
+	margin-bottom: 20px;
+}
+.maintenance-box p{
+	font-size: 1.25rem;
+	color: #6c757d;
+	margin-bottom: 30px;
+}
+.maintenance-image img{
+	max-width: 100%;
+	height: auto;
+	margin-bottom: 20px;
+}
+.gear-icon{
+	font-size: 5rem;
+	color: #991416;
+	animation: spin 3s infinite linear;
+}
+@keyframes spin{
+	from{
+		transform: rotate(0deg);
+	}
+	to{
+		transform: rotate(360deg);
+	}
 }

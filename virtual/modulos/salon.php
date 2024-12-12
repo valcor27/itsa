@@ -96,7 +96,7 @@
 									<label for="nombre" class="form-label">Nombre Salón</label>
 									<div class="input-group mb-3">
 										<span class="input-group-text"><i class="fa-solid fa-building-columns"></i></span>
-										<input type="text" id="nombre" name="nombre" maxlength="19" class="form-control" placeholder="Nombre Salón" aria-label="Nombre Salón" aria-describedby="basic-addon1" required="">
+										<input type="text" id="nombre" name="nombre" maxlength="99" class="form-control" placeholder="Nombre Salón" aria-label="Nombre Salón" aria-describedby="basic-addon1" required="">
 									</div>
 								</div>
                                 <div class="col-md-10" id="alert_error">

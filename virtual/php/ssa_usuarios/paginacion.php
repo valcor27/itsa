@@ -14,7 +14,8 @@
 
   /*-----Verificación de eliminar---------------------------------------------------------------------------------*/
     if($ideliminar > 0){
-      $eliminar="UPDATE empleados SET estatus='0' WHERE expediente='$ideliminar', fecha_movimiento='$fecha', ultimo_movimiento='$proceso', usuario_movimiento='$usuario' LIMIT 1";
+      //$eliminar="UPDATE empleados SET estatus='0' WHERE expediente='$ideliminar', fecha_movimiento='$fecha', ultimo_movimiento='$proceso', usuario_movimiento='$usuario' LIMIT 1";
+      $eliminar="UPDATE empleados SET estatus='0', fecha_movimiento='$fecha', ultimo_movimiento='$proceso', usuario_movimiento='$usuario' WHERE expediente='$ideliminar' LIMIT 1";
       $resultado_elimina=mysqli_query($conexion_database, $eliminar);
     }
   /*--------------------------------------------------------------------------------------------------------------*/

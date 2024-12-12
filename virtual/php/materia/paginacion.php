@@ -28,7 +28,7 @@
 
     mysqli_free_result($resultado_1);
 
-    $nroLotes = 5;
+    $nroLotes = 15;
     $nroPaginas = ceil($nroProductos/$nroLotes);
     $tabla = '';
     $lista_info = '';
@@ -101,7 +101,7 @@
     }
     /**---------------------------------------------------------- */
     /**Consulta Bd para mostrar registros encontrados------------ */
-    $consulta_2 = "SELECT id_materia AS id, nombre_materia, nombre_division FROM materia WHERE nombre_materia LIKE '%$dato%' AND estatus = '1' ORDER BY nombre_division ASC LIMIT $limit, $nroLotes";
+    $consulta_2 = "SELECT id_materia AS id, nombre_materia, nombre_division FROM materia WHERE nombre_materia LIKE '%$dato%' AND estatus = '1' ORDER BY nombre_division, nombre_materia ASC LIMIT $limit, $nroLotes";
     $registro_2 = mysqli_query($conexion_database, $consulta_2);
     /*if (!$registro_2) {
         die("Error en la consulta: " . mysqli_error($conexion_database));

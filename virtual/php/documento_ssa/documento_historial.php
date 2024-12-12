@@ -19,7 +19,7 @@
 			estructuraorganica AS dep_anterior ON historial_movimientos.departamento_anterior = dep_anterior.claveUnidad
 		JOIN 
 			estructuraorganica AS dep_actual ON historial_movimientos.departamento_actual = dep_actual.claveUnidad
-		WHERE historial_movimientos.documento_id_documento = '$id'
+		WHERE historial_movimientos.documento_id_documento = '$id' ORDER BY historial_movimientos.id_historial
 	";
 	$registro = mysqli_query($conexion_database, $consulta);
 	$no_filas = mysqli_num_rows($registro);

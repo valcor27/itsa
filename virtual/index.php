@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="Joan Santiago Valle Corona / Juan Carlos Valle Corona / FamilySystems ©">
     <title>CONTROL DE GESTIÓN</title>
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/estilos.css">
@@ -16,19 +17,51 @@
     <input type="hidden" id="url_logout" value="php/sesion/logout.php">
     <input type="hidden" id="url_modificar_sesion_configuracion" name="url_modificar_sesion_configuracion" value="php/sesion_configuracion/modificar.php">
    <!----------------------------------navbar---------------------------------------------->
-   <header>
-      <nav class="navbar navbar-expand-lg">
-         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img src="img/logo.png" alt="LOGO"></a>
-            <button class="btn btn-outline-menu me-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#aside_menu_cp" aria-controls="aside_menu_cp">
-				   <i class="fa-solid fa-bars"></i>
-			   </button>
-            <div class="nav-item dropdown dropdown-user d-flex me-2">
-                <div id="datos_sesion"></div>
-            </div>
-         </div>
-      </nav>
-   </header> 
+	<header>
+		<nav class="navbar navbar-expand-lg">
+			<div class="container-fluid">
+            	<a class="navbar-brand" href="#"><img src="img/logo.png" alt="LOGO"></a>
+            	<button class="btn btn-outline-menu me-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#aside_menu_cp" aria-controls="aside_menu_cp">
+					   <i class="fa-solid fa-bars"></i>
+				</button>
+				<div class="lado-right">
+					<div class="lado-dots">
+						<div class="dropdown">
+							<button type="button" class="btn btn-outline-danger btn-notificaciones dropdown-toggle sin-flecha" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="fa-solid fa-bell icon-notificaciones"></i>
+								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+    								99+
+    								<span class="visually-hidden">unread messages</span>
+  								</span>
+							</button>
+  							<ul class="dropdown-menu" id="dropdown-notificaciones">
+								<div class="dropdown-header justify-content-center">
+							  		<optgroup class="text-center" label="Control de Notificaciones"></optgroup>
+								</div>
+								<div class="d-flex flex-column flex-md-row gap-4 align-items-center justify-content-center">
+									<div class="list-group">
+										<a class="list-group-item list-group-item-action d-flex gap-3 py-3" href="#" aria-current="true">
+											<!--<img class="rounded-cricle flex-shrink-0" src="https://github.com/twbs.png" alt="twbs" width="32" height="32">-->
+											<div class="d-flex gap-2 w-100 justify-content-between">
+												<div>
+													<h6 class="mb-0 folio-notificaciones">Documento SSA/MLGM/001</h6>
+													<p class="mb-0 opacity-75 mensaje-notificaciones">Joan Santiago Valle Corona, Envió el documento a Recursos Materiales y Servicios</p>
+												</div>
+												<small class="opacity-50 text-nowrap fecha-notificaciones">30/10/2023</small>
+											</div>
+										</a>
+									</div>
+								</div>
+							</ul>
+						</div>
+					</div>
+					<div class="nav-item dropdown dropdown-user lado-btn-lg">
+                		<div id="datos_sesion"></div>
+            		</div>
+				</div>
+         	</div>
+      	</nav>
+   	</header> 
    <!-------------------------------------------------------------------------------->
    <!------------------------------------ aside---------------------------- -->
 	<div class="offcanvas offcanvas-start offcanvas-menu" data-bs-backdrop="static" tabindex="-1" id="aside_menu_cp" aria-labelledby="staticBackdropLabel">
@@ -158,7 +191,7 @@
         $(document).ready(function(){
             Sesion_activa(1);
 			$(function () {
-				$('.selectpicker').selectpicker();
+				//$('.selectpicker').selectpicker();
 			});
         });
     </script>

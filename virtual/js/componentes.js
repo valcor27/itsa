@@ -1,13 +1,23 @@
-
+/**Funcion para solo aceptar solo numeros en el input---------- */
+function Solo_numeros(){
+    $(".solonumeros").keydown(function(event){
+        //alert(event.keyCode);
+        if((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !==190  && event.keyCode !==110 && event.keyCode !==8 && event.keyCode !==9  ){
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------- */
 /*Funcion para abrir el modal de inicio de sesión */
-function Modal_iniciar_sesion(){
+/*function Modal_iniciar_sesion(){
     $('#formulario_sesion')[0].reset();
     $('#error_sesion').hide();
     $('#validar_sesion').hide();
     $('#info_sesion').show();
     $('#modallogin').modal('show');
     return false;
-};
+};*/
 /**----------------------------------------------- */
 /**Funcion para iniciar sesion --------------------*/
 function Inicio_sesion(){
@@ -268,6 +278,8 @@ function Actualizar_usuarios(id){
             $('#plaza_usuario').val(datos[14]).change();
             $('#unidadReportada_usuario').val(datos[15]).change();
             $('#unidadReal_usuario').val(datos[16]).change();
+            $('#hora_entrada_admon').val(datos[17]);
+            $('#hora_salida_admon').val(datos[18]);
             $('#modal_usuarios_ssa_label').html("Modificar Usuario");
             $('#modal_usuarios_ssa').modal('show');
             return false;
@@ -325,6 +337,24 @@ function Eliminar_usuarios(ideliminar){
     return false;
 };
 /**----------------------------------------------- */
+/**----------Pagination inputs horario de admon---------------------------- */
+function Pagination_inputs_empleados(){
+    var tp = $('#nivel_usuario').val();
+
+    //Restaurar todos los campos de entrada primero (por si acaso)
+    $('#hora_entrada_admon, #hora_salida_admon').prop('disabled', false);
+    $('.columna_horario_admon').hide();
+
+    //Verificar la seleccion y mostrar/habilitar campos de entrada según corresponda
+    if(tp.indexOf('1') !== -1 || tp.indexOf('2') !== -1 || tp.indexOf('3') !== -1 || tp.indexOf('4') !== -1 || tp.indexOf('5') !== -1 || tp.indexOf('6') !== -1){
+        $('#hora_entrada_admon').prop('disabled', false);
+        $('#hora_entrada_a').show();
+        $('#hora_salida_admon').prop('disabled', false);
+        $('#hora_salida_a').show();    
+    }
+    return false;
+};
+/**------------------------------------------------------------------------ */
 /**---------------------Modal Domicilio a usuarios---------------------- */
 function Modal_configuracion_domicilio_usuarios(id){
     $('#form_domicilio')[0].reset();
@@ -550,6 +580,8 @@ function Pagination_documentos(partida){
             $('#agrega-registros').html(array[0]);
             $('#pagination_info').html(array[1]);
             $('#pagination').html(array[2]);
+            $('#button_reporte_ssa').html(array[3]);
+            $('#button_reporte_ssa_ex').html(array[4]);
             $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
             return false;
         }        
@@ -602,7 +634,6 @@ function Pagination_inputs() {
 
     return false;
 }
-
 /**------------------------------------------------------------------------ */
 /***------------------------Agregar documentos----------------------------- */
 function Registrar_documento_ssa(){
@@ -652,6 +683,13 @@ function Registrar_documento_ssa(){
                         showConfirmButton: true
                     })
                     return false;
+                }else if(comprobar == 3){
+                    swal({
+                        title: 'Incorrecto',
+                        text: 'El maximo del archivo es de 2 Megas',
+                        type: 'error',
+                        showConfirmButton: true
+                    })
                 }else{
                     $('#alert_error_documento').show();
                 }
@@ -675,6 +713,13 @@ function Registrar_documento_ssa(){
                         showConfirmButton: true
                     })
                     return false;
+                }else if(comprobar == 3){
+                    swal({
+                        title: 'Incorrecto',
+                        text: 'El maximo del archivo es de 2 Megas',
+                        type: 'error',
+                        showConfirmButton: true
+                    })
                 }else{
                     $('#alert_error_documento').show();
                 }
@@ -878,6 +923,8 @@ function Registrar_documento_envio_ssa(){
                         showConfirmButton: false,
                         timer: 1500
                     })
+                    Pagination_documentos(1);
+                    return false;
                 }else{
                     $('#alert_error_documento_envio').show();
                 }
@@ -899,6 +946,31 @@ function Historial_documento(id){
             $('#historial_documentos_table').html(valcor[0]);
             $('#modal_historial_documento_label').html("Historial de Movimientos");
             $('#modal_historial_documento').modal('show');
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/***Descargar documentos--------------------------------------------------- */
+function Descargar_documento(id) {
+    var url = $('#url_descargar_documento').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { id: id },
+        success: function (data) {
+            if (data !== '') {
+                // Construir la URL de descarga directa
+                var url = '/itsa/virtual/documentos/' + data;
+                //window.location.href = url;
+                window.open(url, '_blank');
+            } else {
+                console.log("No se pudo obtener el nombre del archivo.");
+            }
+        },
+        error: function(error){
+            // Manejar el error aquí
+            console.error("Error en la solicitud Ajax:", error);
         }
     });
     return false;
@@ -1906,70 +1978,6 @@ function Eliminar_estudio_docente(id){
     return false;
 };
 /**------------------------------------------------------------------------ */
-
-/**------------------------------------Carga laboral del docente----------- */
-/*var id_docente_carga;
-function Carga_docente(id){
-    $('#contenido_pagina').load('modulos/carga_docente.php');
-    $('html, body').animate({scrollTop: 0}, 'slow');
-    //$('#valor_docente').val(id);
-    id_docente_carga = id;
-    //Pagination_datos_docente(id);
-    /*var url = $('#url_docente_carga_docente').val();
-    $.ajax({
-        type: 'POST',
-        url: url,
-        data: {id:id},
-        success:function(data){
-            var corona = JSON.parse(data);
-            //pendiente los datos del docente nombre expediente y clave
-            $('#contenido_pagina').load('modulos/carga_docente.php');
-            $('html, body').animate({scriollTop: 0}, 'slow');
-            $('#nombre_docente').html(corona[3]);
-            $('#expediente_doc').html(corona[1]);
-            $('#clave_doc').html(corona[2]);
-            return false;
-        }
-    });*/
-    /*return false;
-};*/
-/**------------------------------------------------------------------------ */
-/**----------------Pagination datos del docente---------------------------- */
-/*function Pagination_datos_docente(){
-    var url = $('#url_datos_docente').val();
-    var id = id_docente_carga;
-    $.ajax({
-        type: 'POST',
-        url: url, 
-        data: {id,id},
-        success:function(data){
-            var corona = JSON.parse(data);
-            $('#nombre_docente').html(corona[3]);
-            $('#expediente_doc').html(corona[1]);
-            $('#clave_doc').html(corona[2]);
-            return false;
-        }
-    });
-    return false;
-};*/
-/**------------------------------------------------------------------------ */
-/**----------------Pagination Carga academica del docente------------------ */
-/*function Pagination_carga_laboral(){
-    var url = $('#url_carga_laboral').val();
-    var id = id_docente_carga;
-    $.ajax({
-        type: 'POST',
-        url: url,
-        data: {id,id},
-        success:function(data){
-            var valle = JSON.parse(data);
-            $('#tabla_carga').html(valle[0]);
-            return false;
-        }
-    });
-    return false;
-};*/
-/**------------------------------------------------------------------------ */
 /***---------Cargar módulo con datos de la carga del docente--------------- */
 function Examina_carga_individual(iddocente){
     $('#contenido_pagina').load("modulos/carga_docente.php", function Detalle_procesado(){
@@ -2174,6 +2182,2699 @@ function Eliminar_carga_materia(ideliminar){
             swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
         }
     }); 
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Paginacion del modulo de asistencia ------------------------------------ */
+function Pagination_asistencia(partida){
+    var url = $('#url_paginar').val();
+    var dato = $('#busqueda').val();
+    var ideliminar = '0';
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{ideliminar: ideliminar, dato:dato, partida:partida},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            return false;
+        }        
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Modal de asistencia----------------------------------------------------- */
+function Modal_configuracion_asistencia(){
+    $('#form_asistencia')[0].reset();
+    $('#btn_actualizar_documento_asistencia').hide();
+    $('#btn_registrar_documento_asistencia').show();
+    $('#proceso_asistencia').val('Registro');
+    $('#alert_error_asistencia').hide();
+    $('#modal_asistencia_label').html("Agregar Nuevo Documento de Asistencia");
+    $('#modal_asistencia').modal('show');
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/***Registrar documento de asistencia-------------------------------------- */
+function Registrar_documento_asistencia(){
+    var formData = new FormData($("#form_asistencia")[0]);
+    $.ajax({
+        type: 'POST',
+        url: $('#form_asistencia').attr('action'),
+        data: formData,
+        processData: false,
+        contentType: false,
+        success:function(data){
+            var array = JSON.parse(data);
+            var comprobar = array[3];
+            if($('#proceso_asistencia').val() == 'Registro'){
+                if(comprobar == 0){
+                    $('#modal_asistencia').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Agregado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else if(comprobar == 2){
+                    swal({
+                        title: 'Incorrecto',
+                        text: 'Por favor, eliga un Archivo .TXT',
+                        type: 'error',
+                        showConfirmButton: true
+                    })
+                    return false;
+                }else{
+                    $('#alert_error_asistencia').show();
+                }
+            }else{
+                if(comprobar == 0){
+                    $('#modal_asistencia').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Actualizado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else if(comprobar == 2){
+                    swal({
+                        title: 'Incorrecto',
+                        text: 'Por favor, eliga un Archivo .TXT',
+                        type: 'error',
+                        showConfirmButton: true
+                    })
+                    return false;
+                }else{
+                    $('#alert_error_asistencia').show();
+                }
+            }
+        }
+    });
+    return false;
+};
+/*------------------------------------------------------------------------- */
+/**Actualizacion del formato de asistencia--------------------------------- */
+function Actualizar_asistencia(id){
+    $('#form_asistencia')[0].reset();
+    var url = $('#url_modificar').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: 'id='+id,
+        success:function(data){
+            var cachetonypolar = JSON.parse(data);
+            $('#proceso_asistencia').val('Edicion');
+            $('#id_asistencia').val(cachetonypolar[0]);
+            $('#fecha_inicio').val(cachetonypolar[1]);
+            $('#fecha_fin').val(cachetonypolar[2]);
+            $('#alert_error_asistencia').hide();
+            $('#btn_registrar_documento_asistencia').hide();
+            $('#btn_actualizar_documento_asistencia').show();
+            $('#modal_asistencia_label').html("Actulizar Asistencia");
+            $('#modal_asistencia').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Eliminacion del formato de asistencia----------------------------------- */
+function Eliminar_asistencia(ideliminar){
+    var url = $('#url_paginar').val();
+    var dato = '';
+    var partida = '1';
+
+    swal({
+        title: "Eliminar Asistencia?",
+        text: "El registro se eliminara de forma permanente!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirmar!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+        cancelButtonText: "Cancelar"
+    },
+
+    function(isConfirm){
+        if (isConfirm) {
+
+        $.ajax({
+                type:'POST',
+                url:url,
+                data: {ideliminar: ideliminar, dato: dato, partida: partida},
+                success:function(data){
+                    var array = eval(data);
+
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Eliminado con Éxito',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    return false;
+                }
+            });    
+
+        }else{
+            swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Examinar la asistencia por quincena de todos los empleados-------------- */
+function Examina_asistencia_quincenal(idasistencia){
+    $('#contenido_pagina').load("modulos/detalle_asistencia.php", function Detalle_asistencia_procesado(){
+        var url = "php/asistencia/consulta_detalle_asistencia.php";
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data:{idasistencia: idasistencia},
+            success:function(data){
+                var array = JSON.parse(data);
+                $('#detalle_quincena').html(array[0]);
+                $('#agrega_tabla').html(array[1]);
+                $('#x_identificador').val(array[2]);
+                return false;
+            }
+        });
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Paginacion del modulo de incidencia ------------------------------------ */
+function Pagination_incidencia(partida){
+    var url = $('#url_paginar').val();
+    var dato = $('#busqueda').val();
+    var ideliminar = '0';
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{ideliminar: ideliminar, dato:dato, partida:partida},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            return false;
+        }        
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Modal de asistencia----------------------------------------------------- */
+function Modal_configuracion_incidencia(){
+    $('#form_incidencia')[0].reset();
+    $('#exp_emp_incidencia').selectpicker('val', '');
+    $('#btn_registrar_incidencia').show();
+    $('#btn_actualizar_incidencia').hide();
+    $('#proceso_incidencia').val('Registro');
+    $('#alert_error_incidencia').hide();
+    Pagination_info_incidencia(1);
+    $('#modal_incidencia_label').html("Agregar Nueva Incidencia");
+    $('#modal_incidencia').modal('show');
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/***Registrar documento de asistencia-------------------------------------- */
+function Registrar_incidencia(){
+    $.ajax({
+        type:'POST',
+        url:$('#form_incidencia').attr('action'),
+        data:$('#form_incidencia').serialize(),
+        success:function(data){
+            var array = JSON.parse(data);
+            var comprobar = array[3];
+            if($('#proceso_incidencia').val() == 'Registro'){
+                if(comprobar == 0){
+                    $('#modal_incidencia').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Agregado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error_incidencia').show();
+                }
+            }else{
+                if(comprobar == 0){
+                    $('#modal_incidencia').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Actualizado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error_incidencia').show();
+                }
+            }
+        }
+    });
+    return false;
+};
+/*------------------------------------------------------------------------- */
+/**---------------------Buscar select empleados---------------------------- */
+function Pagination_select_empleados(partida){
+    var url = $('#url_buscar_empleados').val();
+    //$('#exp_emp').selectpicker('val', '');
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{partida:partida},
+        success:function(data){
+            var array = JSON.parse(data);
+            //$('#exp_emp').empty().append(array[0]);
+            //$('.selectpicker').selectpicker('refresh');
+            $('#incidencia_empleado_incidencia').html(array[0]);
+            //$('#exp_emp').html(array[0]);
+            //$('#exp_emp').selectpicker('refresh');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**----Buscar select de  claves movimientos RH----------------------------- */
+function Pagination_select_claves_movimiento(partida){
+    var url = $('#url_buscar_claves_movimiento').val();
+    $.ajax({
+        type: 'POST',
+        url:url,
+        data:{partida:partida},
+        success:function(data){
+            var valcor = JSON.parse(data);
+            $('#id_clave_mov').html(valcor[0]);
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**---Buscar info de folio y hora------------------------------------------ */
+function Pagination_info_incidencia(partida){
+    var url = $('#url_buscar_info').val();
+    $.ajax({
+        type: 'POST',
+        url:url,
+        data:{partida:partida},
+        success:function(data){
+            var valle = JSON.parse(data);
+            $('#incidencia_hora').val(valle[0]);
+            $('#incidencia_folio').val(valle[1]);
+            $('#fElaboracion').val(valle[2]);
+            //console.log(valle[0]);
+            //console.log(valle[1]);            
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/****Actualizar incidencia------------------------------------------------- */
+function Actualizar_incidencia(id){
+    $('#form_incidencia')[0].reset();
+    $('#exp_emp_incidencia').selectpicker('val', '');
+    var url = $('#url_modificar').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: 'id='+id,
+        success:function(data){
+            var cachetonypolar = JSON.parse(data);
+            $('#proceso_incidencia').val('Edicion');
+            $('#exp_emp_incidencia').selectpicker('val', '');
+            $('#id_incidencia').val(cachetonypolar[0]);
+            $('#incidencia_folio').val(cachetonypolar[1]);
+            $('#exp_emp_incidencia').selectpicker('val', cachetonypolar[2]).change();
+            $('#fInicio').val(cachetonypolar[3]);
+            $('#fFin').val(cachetonypolar[4]);
+            $('#fElaboracion').val(cachetonypolar[5]);
+            $('#id_clave_mov').val(cachetonypolar[6]).change();
+            $('#observacion').val(cachetonypolar[7]);
+            $('#incidencia_hora').val(cachetonypolar[8]);
+            $('#alert_error_incidencia').hide();
+            $('#btn_registrar_incidencia').hide();
+            $('#btn_actualizar_incidencia').show();
+            $('#modal_incidencia_label').html("Actulizar Incidencia");
+            $('#modal_incidencia').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**-----Eliminar incidencia------------------------------------------------ */
+function Eliminar_incidencia(ideliminar){
+    var url = $('#url_paginar').val();
+    var dato = '';
+    var partida = '1';
+
+    swal({
+        title: "Eliminar Incidencia?",
+        text: "El registro se eliminara de forma permanente!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirmar!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+        cancelButtonText: "Cancelar"
+    },
+
+    function(isConfirm){
+        if (isConfirm) {
+
+           $.ajax({
+                type:'POST',
+                url:url,
+                data: {ideliminar: ideliminar, dato: dato, partida: partida},
+                success:function(data){
+                    var array = eval(data);
+
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Eliminado con Éxito',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    return false;
+                }
+            });    
+
+        }else{
+            swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**-----Paginacion del dia inhabil ---------------------------------------- */
+function Pagination_dia_inhabil(partida){
+    var url = $('#url_paginar').val();
+    var dato = $('#busqueda').val();
+    var ideliminar = '0';
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{ideliminar: ideliminar, dato:dato, partida:partida},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            return false;
+        }        
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**------Modal de dia inhabil---------------------------------------------- */
+function Modal_configuracion_dia_inhabil(){
+    $('#form_dia_inhabil')[0].reset();
+    $('#btn_registrar_dia_i').show();
+    $('#btn_actualizar_dia_i').hide();
+    $('#proceso_dia_inhabil').val('Registro');
+    $('#alert_error_dia_inhabil').hide();
+    $('#modal_dia_inhabil_label').html("Agregar Nuevo Día Inhábil");
+    $('#modal_dia_inhabil').modal('show');
+    return false;
+    
+};
+/**------------------------------------------------------------------------ */
+/**----Registrar el dia inhabil-------------------------------------------- */
+function Registrar_dia_inhabil(){
+    $.ajax({
+        type:'POST',
+        url:$('#form_dia_inhabil').attr('action'),
+        data:$('#form_dia_inhabil').serialize(),
+        success:function(data){
+            var array = JSON.parse(data);
+            var comprobar = array[3];
+            if($('#proceso_dia_inhabil').val() == 'Registro'){
+                if(comprobar == 0){
+                    $('#modal_dia_inhabil').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Agregado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error_dia_inhabil').show();
+                }
+            }else{
+                if(comprobar == 0){
+                    $('#modal_dia_inhabil').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Actualizado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error_dia_inhabil').show();
+                }
+            }
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/*****Actualizar dia inhabil----------------------------------------------- */
+function Actualizar_dia_inhabil(id){
+    $('#form_dia_inhabil')[0].reset();
+    var url = $('#url_modificar').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: 'id='+id,
+        success:function(data){
+            var cachetonypolar = JSON.parse(data);
+            $('#proceso_dia_inhabil').val('Edicion');
+            $('#id_dia_inhabil').val(cachetonypolar[0]);
+            $('#fDia_i').val(cachetonypolar[1]);
+            $('#concepto_dia_i').val(cachetonypolar[2]);
+            $('#alert_error_dia_inhabil').hide();
+            $('#btn_registrar_dia_i').hide();
+            $('#btn_actualizar_dia_i').show();
+            $('#modal_dia_inhabil_label').html("Actulizar Día Inhábil");
+            $('#modal_dia_inhabil').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Eliminar Dia Inhabil---------------------------------------------------- */
+function Eliminar_dia_inhabil(ideliminar){
+    var url = $('#url_paginar').val();
+    var dato = '';
+    var partida = '1';
+
+    swal({
+        title: "Eliminar Día Inhábil?",
+        text: "El registro se eliminara de forma permanente!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirmar!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+        cancelButtonText: "Cancelar"
+    },
+
+    function(isConfirm){
+        if (isConfirm) {
+
+           $.ajax({
+                type:'POST',
+                url:url,
+                data: {ideliminar: ideliminar, dato: dato, partida: partida},
+                success:function(data){
+                    var array = eval(data);
+
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Eliminado con Éxito',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    return false;
+                }
+            });    
+
+        }else{
+            swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/***-----Paginacion de los vehiculos--------------------------------------- */
+function Pagination_vehiculo(partida){
+    var url = $('#url_paginar').val();
+    var dato = $('#busqueda').val();
+    var ideliminar = '0';
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{ideliminar: ideliminar, dato:dato, partida:partida},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            return false;
+        }        
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**funcion para abrir el modal del parque vehicular------------------------ */
+function Modal_configuracion_vehiculo(){
+    $('#form_vehiculo')[0].reset();
+    $('#btn_agregar_vehiculo').show();
+    $('#btn_actualizar_vehiculo').hide();
+    $('#proceso_vehiculo').val('Registro');
+    $('#alert_error').hide();
+    $('#modal_vehiculo_label').html("Agregar Nuevo Vehiculo");
+    $('#modal_vehiculo').modal('show');
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**funcion para registrar un vehiculo-------------------------------------- */
+function Registrar_vehiculo(){
+    $.ajax({
+        type:'POST',
+        url:$('#form_vehiculo').attr('action'),
+        data:$('#form_vehiculo').serialize(),
+        success:function(data){
+            var array = JSON.parse(data);
+            var comprobar = array[3];
+            if($('#proceso_vehiculo').val() == 'Registro'){
+                if(comprobar == 0){
+                    $('#modal_vehiculo').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Agregado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error').show();
+                }
+            }else{
+                if(comprobar == 0){
+                    $('#modal_vehiculo').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Actualizado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error').show();
+                }
+            }
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**funcion para actualizar los datos de un vehiculo------------------------ */
+function Actualizar_vehiculo(id){
+    $('#form_vehiculo')[0].reset();
+    var url = $('#url_modificar').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: 'id='+id,
+        success:function(data){
+            var cachetonypolar = JSON.parse(data);
+            $('#proceso_vehiculo').val('Edicion');
+            $('#id_vehiculo').val(cachetonypolar[0]);
+            $('#placa').val(cachetonypolar[1]);
+            $('#noserie').val(cachetonypolar[2]);
+            $('#kminicial').val(cachetonypolar[3]);
+            $('#tipo').val(cachetonypolar[4]);
+            $('#cilindro').val(cachetonypolar[5]);
+            $('#kmporlitro').val(cachetonypolar[6]);
+            $('#modelo').val(cachetonypolar[7]);
+            $('#color').val(cachetonypolar[8]);
+            $('#marca').val(cachetonypolar[9]);
+            $('#submarca').val(cachetonypolar[10]);
+            $('#alert_error').hide();
+            $('#btn_agregar_vehiculo').hide();
+            $('#btn_actualizar_vehiculo').show();
+            $('#modal_vehiculo_label').html("Actulizar Vehiculo");
+            $('#modal_vehiculo').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**funcion para eliminar el registro de un vehiculo------------------------ */
+function Eliminar_vehiculo(ideliminar){
+    var url = $('#url_paginar').val();
+    var dato = '';
+    var partida = '1';
+
+    swal({
+        title: "Eliminar Vehiculo?",
+        text: "El registro se eliminara de forma permanente!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirmar!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+        cancelButtonText: "Cancelar"
+    },
+
+    function(isConfirm){
+        if (isConfirm) {
+
+           $.ajax({
+                type:'POST',
+                url:url,
+                data: {ideliminar: ideliminar, dato: dato, partida: partida},
+                success:function(data){
+                    var array = eval(data);
+
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Eliminado con Éxito',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    return false;
+                }
+            });    
+
+        }else{
+            swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**funcion para paginacion de un combustible------------------------------- */
+function Pagination_combustible(partida){
+    var url = $('#url_paginar').val();
+    var dato = $('#busqueda').val();
+    var ideliminar = '0';
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{ideliminar: ideliminar, dato:dato, partida:partida},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            return false;
+        }        
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**funcion para modal de combustible--------------------------------------- */
+function Modal_configuracion_combustible(){
+    $('#form_combustible')[0].reset();
+    $('#btn_agregar_combustible').show();
+    $('#btn_actualizar_combustible').hide();
+    $('#proceso_combustible').val('Registro');
+    $('#alert_error').hide();
+    $('#modal_combustible_label').html("Agregar Nuevo Combustible");
+    $('#modal_combustible').modal('show');
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**funcion para registrar un combustible----------------------------------- */
+function Registrar_combustible(){
+    $.ajax({
+        type:'POST',
+        url:$('#form_combustible').attr('action'),
+        data:$('#form_combustible').serialize(),
+        success:function(data){
+            var array = JSON.parse(data);
+            var comprobar = array[3];
+            if($('#proceso_combustible').val() == 'Registro'){
+                if(comprobar == 0){
+                    $('#modal_combustible').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Agregado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error').show();
+                }
+            }else{
+                if(comprobar == 0){
+                    $('#modal_combustible').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Actualizado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error').show();
+                }
+            }
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**funcion para actualizar los datos del combustible------------------------ */
+function Actualizar_combustible(id){
+    $('#form_combustible')[0].reset();
+    var url = $('#url_modificar').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: 'id='+id,
+        success:function(data){
+            var peito = JSON.parse(data);
+            $('#proceso_combustible').val('Edicion');
+            $('#id_combustible').val(peito[0]);
+            $('#nombre_combustible').val(peito[1]);
+            $('#precio_combustible').val(peito[2]);
+            $('#alert_error').hide();
+            $('#btn_agregar_combustible').hide();
+            $('#btn_actualizar_combustible').show();
+            $('#modal_combustible_label').html("Actulizar Combustible");
+            $('#modal_combustible').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**funcion para eliminar el registro de un vehiculo------------------------ */
+function Eliminar_combustible(ideliminar){
+    var url = $('#url_paginar').val();
+    var dato = '';
+    var partida = '1';
+
+    swal({
+        title: "Eliminar Combustible?",
+        text: "El registro se eliminara de forma permanente!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirmar!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+        cancelButtonText: "Cancelar"
+    },
+
+    function(isConfirm){
+        if (isConfirm) {
+
+           $.ajax({
+                type:'POST',
+                url:url,
+                data: {ideliminar: ideliminar, dato: dato, partida: partida},
+                success:function(data){
+                    var array = eval(data);
+
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Eliminado con Éxito',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    return false;
+                }
+            });    
+
+        }else{
+            swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**----------Funcion para la paginacion de licencia------------------------ */
+function Pagination_licencia(partida){
+    var url = $('#url_paginar').val();
+    var dato = $('#busqueda').val();
+    var ideliminar = '0';
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{ideliminar: ideliminar, dato:dato, partida:partida},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            return false;
+        }        
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**----------Funcion select empleados para licencias*---------------------- */
+function Pagination_empleados_licencia(partida){
+    var url = $('#url_buscar_empleados').val();
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{partida:partida},
+        success:function(data){
+            var array = JSON.parse(data);
+            $('#licencia_empleado_licencia').html(array[0]);
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**---------Modal de licencia--------------------------------------------- */
+function Modal_configuracion_licencia(){
+    $('#form_licencia')[0].reset();
+    $('#exp_emp_licencia').selectpicker('val', '');
+    $('#btn_registrar_licencia').show();
+    $('#btn_actualizar_licencia').hide();
+    $('#proceso_licencia').val('Registro');
+    $('#alert_error').hide();
+    Pagination_info_licencia(1);
+    $('#modal_licencia_label').html("Agregar Nueva Licencia");
+    $('#modal_licencia').modal('show');
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**---------Info de la licencia-------------------------------------------- */
+function Pagination_info_licencia(partida){
+    var url = $('#url_buscar_info').val();
+    $.ajax({
+        type: 'POST',
+        url:url,
+        data:{partida:partida},
+        success:function(data){
+            var valle = JSON.parse(data);
+            $('#hora_l').val(valle[0]);
+            $('#folio_l').val(valle[1]);
+            $('#fecha_ela_l').val(valle[2]);       
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Funcion para Registrar licencia----------------------------------------- */
+function Registrar_licencia(){
+    $.ajax({
+        type:'POST',
+        url:$('#form_licencia').attr('action'),
+        data:$('#form_licencia').serialize(),
+        success:function(data){
+            var array = JSON.parse(data);
+            var comprobar = array[3];
+            if($('#proceso_licencia').val() == 'Registro'){
+                if(comprobar == 0){
+                    $('#modal_licencia').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Agregado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error').show();
+                }
+            }else{
+                if(comprobar == 0){
+                    $('#modal_licencia').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Actualizado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error').show();
+                }
+            }
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/****Modificar la licencia------------------------------------------------- */
+function Actualizar_licencia(id){
+    $('#form_licencia')[0].reset();
+    var url = $('#url_modificar').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: 'id='+id,
+        success:function(data){
+            var peito = JSON.parse(data);
+            $('#proceso_licencia').val('Edicion');
+            $('#id_licencia').val(peito[0]);
+            $('#folio_l').val(peito[1]);
+            $('#exp_emp_licencia').selectpicker('val', peito[2]).change();
+            $('#concepto').val(peito[3]);
+            $('#fecha_ela_l').val(peito[4]);
+            $('#hora_l').val(peito[5]);
+            $('#fInicio').val(peito[6]);
+            $('#fFin').val(peito[7]);
+            $('#alert_error').hide();
+            $('#btn_registrar_licencia').hide();
+            $('#btn_actualizar_licencia').show();
+            $('#modal_licencia_label').html("Actulizar Licencia");
+            $('#modal_licencia').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**-Eliminar la licencia--------------------------------------------------- */
+function Eliminar_licencia(ideliminar){
+    var url = $('#url_paginar').val();
+    var dato = '';
+    var partida = '1';
+
+    swal({
+        title: "Eliminar Licencia?",
+        text: "El registro se eliminara de forma permanente!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirmar!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+        cancelButtonText: "Cancelar"
+    },
+
+    function(isConfirm){
+        if (isConfirm) {
+
+           $.ajax({
+                type:'POST',
+                url:url,
+                data: {ideliminar: ideliminar, dato: dato, partida: partida},
+                success:function(data){
+                    var array = eval(data);
+
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Eliminado con Éxito',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    return false;
+                }
+            });    
+
+        }else{
+            swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**----------Funcion para la paginacion de choferes------------------------ */
+function Pagination_chofer(partida){
+    var url = $('#url_paginar').val();
+    var dato = $('#busqueda').val();
+    var ideliminar = '0';
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{ideliminar: ideliminar, dato:dato, partida:partida},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            return false;
+        }        
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**----------Funcion select empleados para choferes*---------------------- */
+function Pagination_empleados_chofer(partida){
+    var url = $('#url_buscar_empleados').val();
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{partida:partida},
+        success:function(data){
+            var array = JSON.parse(data);
+            $('#chofer_empleado_chofer').html(array[0]);
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**---------Modal de licencia--------------------------------------------- */
+function Modal_configuracion_chofer(){
+    $('#form_chofer')[0].reset();
+    $('#exp_emp_chofer').selectpicker('val', '');
+    $('#btn_agregar_chofer').show();
+    $('#btn_actualizar_chofer').hide();
+    $('#proceso_chofer').val('Registro');
+    $('#alert_error').hide();
+    $('#modal_chofer_label').html("Agregar Nuevo Chofer");
+    $('#modal_chofer').modal('show');
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/***----Funcion para registro de choferes---------------------------------- */
+function Registrar_chofer(){
+    $.ajax({
+        type:'POST',
+        url:$('#form_chofer').attr('action'),
+        data:$('#form_chofer').serialize(),
+        success:function(data){
+            var array = JSON.parse(data);
+            var comprobar = array[3];
+            if($('#proceso_chofer').val() == 'Registro'){
+                if(comprobar == 0){
+                    $('#modal_chofer').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Agregado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error').show();
+                }
+            }else{
+                if(comprobar == 0){
+                    $('#modal_chofer').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Actualizado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error').show();
+                }
+            }
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/***----Funcion para modificar--------------------------------------------- */
+function Actualizar_chofer(id){
+    $('#form_chofer')[0].reset();
+    var url = $('#url_modificar').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: 'id='+id,
+        success:function(data){
+            var peito = JSON.parse(data);
+            $('#proceso_chofer').val('Edicion');
+            $('#id_chofer').val(peito[0]);
+            $('#exp_emp_chofer').selectpicker('val', peito[1]).change();
+            $('#alert_error').hide();
+            $('#btn_agregar_chofer').hide();
+            $('#btn_actualizar_chofer').show();
+            $('#modal_chofer_label').html("Actulizar Chofer");
+            $('#modal_chofer').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**-----Funcion para eliminar---------------------------------------------- */
+function Eliminar_chofer(ideliminar){
+    var url = $('#url_paginar').val();
+    var dato = '';
+    var partida = '1';
+
+    swal({
+        title: "Eliminar Chofer?",
+        text: "El registro se eliminara de forma permanente!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirmar!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+        cancelButtonText: "Cancelar"
+    },
+
+    function(isConfirm){
+        if (isConfirm) {
+
+           $.ajax({
+                type:'POST',
+                url:url,
+                data: {ideliminar: ideliminar, dato: dato, partida: partida},
+                success:function(data){
+                    var array = eval(data);
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Eliminado con Éxito',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    return false;
+                }
+            });    
+
+        }else{
+            swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**------Paginacion empleados para comision-------------------------------- */
+function Pagination_empleados_comision(partida){
+    var url = $('#url_buscar_empleados').val();
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{partida:partida},
+        success:function(data){
+            var array = JSON.parse(data);
+            $('#comision_empleado_comision').html(array[0]);
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**------Modal para comision del departamento de personal------------------ */
+function Modal_configuracion_comision_dp(){
+    $('#form_comision_dp')[0].reset();
+    $('#exp_emp_comision').selectpicker('val', '');
+    $('#btn_agregar_comision_dp').show();
+    $('#btn_actualizar_comision_dp').hide();
+    $('#proceso_comision_dp').val('Registro');
+    $('#alert_error').hide();
+    $('#alert_error_2').hide();
+    $('#alert_error_3').hide();
+    Pagination_informacion_comision();
+    $('#modal_comision_dp_label').html("Asignar Nuevo Comisionado");
+    $('#modal_comision_dp').modal('show');
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Funcion para informacion de la comision folio y fecha------------------- */
+function Pagination_informacion_comision(){
+    var url = $('#url_info_comision').val();
+    var partida = 1;
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{partida:partida},
+        success:function(data){
+            var logan = JSON.parse(data);
+            $('#fecha_comision').val(logan[0]);
+            $('#folio_comision').val(logan[1]);
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Funcion para informacion del empleado al seleecionar-------------------- */
+function Pagination_info_comision() {
+    var url = $('#url_info_empleado_comision').val();
+    var empleados = $('#exp_emp_comision').val(); // Esto ahora es un array
+
+    // Limpiar los valores anteriores
+    $('#lugar').val('');
+    $('#n_comi').val('');
+    $('#cargo').val('');
+    $('#id_plaza').val('');
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: {empleado: empleados},
+        success: function(data) {
+            try {
+                var valcor = JSON.parse(data);
+
+                // Mostrar los datos generales
+                $('#lugar').val(valcor[0]['lugar']);
+                $('#n_comi').val(valcor[0]['n_comi']);
+
+                // Mostrar los datos específicos de cada empleado
+                var cargos = [];
+                var id_plazas = [];
+                for (var i = 1; i < valcor.length; i++) {
+                    cargos.push(valcor[i]['cargo']);
+                    id_plazas.push(valcor[i]['id_cargo']);
+                }
+                $('#cargo').val(cargos.join(', '));
+                $('#id_plaza').val(id_plazas.join(', '));
+
+            } catch (e) {
+                console.error('Error parsing JSON:', e, data);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error in AJAX request:', textStatus, errorThrown);
+        }
+    });
+
+    return false;
+}
+/*function Pagination_info_comision(){
+    var url = $('#url_info_empleado_comision').val();
+    var empleado = $('#exp_emp_comision').val();
+    
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{empleado:empleado},
+        success:function(data){
+            var valcor = JSON.parse(data);
+            $('#lugar').val(valcor[0]);
+            $('#n_comi').val(valcor[1]);
+            $('#cargo').val(valcor[2]);
+            $('#id_plaza').val(valcor[3]);
+            return false;
+        }
+    });
+    return false;
+};*/
+/**------------------------------------------------------------------------ */
+/**Funcion para obtener la duracion de la comision------------------------- */
+function Pagination_validar_comision() {
+    // Obtén los valores de los inputs
+    var finicio = $('#fInicio').val().trim();
+    var ffin = $('#fFin').val().trim();
+    var hini = $('#hora_incio').val().trim();
+    var hfin = $('#hora_fin').val().trim();
+
+    // Verifica si todos los inputs tienen valor
+    if (finicio !== '' && ffin !== '' && hini !== '' && hfin !== '') {
+        var url = $('#url_validacion_comision').val();
+        var empleado = $('#exp_emp_comision').val();
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { finicio:finicio, ffin:ffin, hini:hini, hfin:hfin, empleado:empleado },
+            success: function (data) {
+                var valcor = JSON.parse(data);
+                $('#duracion').val(valcor[0]);
+                return false;
+            }
+        });
+    } else {
+        console.log('Aún no todos los inputs tienen valor.');
+    }
+
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/***-----Registrar el formulario correspondiente a personal de la comision- */
+function Registrar_comision_dp(){
+    $.ajax({
+        type:'POST',
+        url:$('#form_comision_dp').attr('action'),
+        data:$('#form_comision_dp').serialize(),
+        success:function(data){
+            var array = JSON.parse(data);
+            var comprobar = array[0];//Modificar cuando compongamos la paginacion
+            if($('#proceso_comision_dp').val() == 'Registro'){
+                if(comprobar == 0){
+                    $('#modal_comision_dp').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Agregado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    /*$('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip();*/// Inicializa todos los tooltips
+                    return false;
+                }else if(comprobar == 1){
+                    $('#alert_error').show();
+                }else if(comprobar == 2){
+                    $('#alert_error_3').show();
+                }else if(comprobar == 3){
+                    $('#alert_error_2').show();
+                }
+            }else{
+                if(comprobar == 0){
+                    $('#modal_comision_dp').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Actualizado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else if(comprobar == 2){
+                    $('#alert_error_comision').show();
+                }else if(comprobar == 1){
+                    $('#alert_error_comision_2').show();
+                }
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error en la solicitud AJAX:', error);
+            // Manejar errores según sea necesario
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**funcion para paginacion de una comision--------------------------------- */
+function Pagination_comision(partida){
+    var url = $('#url_paginar').val();
+    var dato = $('#busqueda').val();
+    var ideliminar = '0';
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{ideliminar: ideliminar, dato:dato, partida:partida},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            return false;
+        }        
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Actualizar comision ---------------------------------------------------- */
+function Actualizar_comision_dp(id){
+    $('#form_comision_dp')[0].reset();
+    var url = $('#url_modificar_dp').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: 'id='+id,
+        success:function(data){
+            var peito = JSON.parse(data);
+            $('#proceso_comision_dp').val('Edicion');
+            $('#id_comision_dp').val(peito[0]);
+            $('#id_plaza').val(peito[1]);
+            $('#exp_emp_comision').selectpicker('val', peito[2]).change();
+            $('#lugar').val(peito[3]);
+            $('#fecha_comision').val(peito[4]);
+            $('#n_comi').val(peito[5]);
+            $('#folio_comision').val(peito[6]);
+            $('#cargo').val(peito[7]);
+            $('#fInicio').val(peito[8]);
+            $('#fFin').val(peito[9]);
+            $('#hora_incio').val(peito[10]);
+            $('#hora_fin').val(peito[11]);
+            $('#finalidad').val(peito[12]);
+            $('#duracion').val(peito[13]);
+            $('#pais').val(peito[14]);
+            $('#estado').val(peito[15]);
+            $('#municipio').val(peito[16]);
+            $('#lugar_comision').val(peito[17]);
+            $('#alert_error').hide();
+            $('#alert_error_2').hide();
+            $('#btn_agregar_comision_dp').hide();
+            $('#btn_actualizar_comision_dp').show();
+            $('#modal_comision_dp_label').html("Actulizar Comisión");
+            $('#modal_comision_dp').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Eliminar Comision------------------------------------------------------- */
+function Eliminar_comision_dp(ideliminar){
+    var url = $('#url_paginar').val();
+    var dato = '';
+    var partida = '1';
+
+    swal({
+        title: "Eliminar Comisión?",
+        text: "El registro se eliminara de forma permanente!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirmar!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+        cancelButtonText: "Cancelar"
+    },
+
+    function(isConfirm){
+        if (isConfirm) {
+
+           $.ajax({
+                type:'POST',
+                url:url,
+                data: {ideliminar: ideliminar, dato: dato, partida: partida},
+                success:function(data){
+                    var array = eval(data);
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Eliminado con Éxito',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    return false;
+                }
+            });    
+
+        }else{
+            swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Funcion para asignar viaticos al comisionado---------------------------- */
+function Viaticos_comision(id_viaticos, id_comision){
+    if(id_viaticos > 0){
+        Modificar_viaticos(id_viaticos);
+    }else{
+        $('#form_comision_rf')[0].reset();
+        $('#id_comision_rf').val(id_viaticos);
+        $('#comision_id_comision').val(id_comision);
+        $('#proceso_comision_rf').val('Registro')
+        $('#alert_error_rf').hide();
+        $('#btn_agregar_comision_rf').show();
+        $('#btn_actualizar_comision_rf').hide();
+        // Restaurar todos los campos de entrada primero (por si acaso)
+        $('#input_especificar_rf').hide();
+        $('#especificar').val('').prop('disabled', true);
+        $('#modal_comision_rf_label').html('Agregar Viaticos Comisión')
+        $('#modal_comision_rf').modal('show');
+    }  
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**---Registro de viativos ------------------------------------------------ */
+function Registrar_comision_rf(){
+    $.ajax({
+        type:'POST',
+        url:$('#form_comision_rf').attr('action'),
+        data:$('#form_comision_rf').serialize(),
+        success:function(data){
+            var array = JSON.parse(data);
+            var comprobar = array[0];
+            if($('#proceso_comision_rf').val() == 'Registro'){
+                if(comprobar == 0){
+                    $('#modal_comision_rf').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Agregado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    Pagination_comision(1);
+                    return false;
+                }else{
+                    $('#alert_error_rf').show();
+                }
+            }else{
+                if(comprobar == 0){
+                    $('#modal_comision_rf').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Actualizado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    Pagination_comision(1);
+                    return false;
+                }else{
+                    $('#alert_error_rf').show();
+                }
+            }
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/***Actualizar viaticos --------------------------------------------------- */
+function Modificar_viaticos(id_viaticos){
+    $('#form_comision_dp')[0].reset();
+    var url = $('#url_modificar_viaticos').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: 'id='+id_viaticos,
+        success:function(data){
+            var peito = JSON.parse(data);
+            $('#proceso_comision_rf').val('Edicion')
+            $('#id_comision_rf').val(peito[0]);
+            $('#comision_id_comision').val(peito[1]);
+            $('#viatico').val(peito[2]);
+            $('#combustible').val(peito[3]);
+            $('#casetas').val(peito[4]);
+            $('#otros').val(peito[5]);
+            var otros = peito[5];
+            if (otros > 0) {
+                $('#input_especificar_rf').show();
+                $('#especificar').prop('disabled', false);
+            } else {
+                $('#input_especificar_rf').hide();
+                $('#especificar').prop('disabled', true);
+            }
+            $('#especificar').val(peito[6]);
+            $('#total').val(peito[7]);
+            $('#alert_error_rf').hide();
+            $('#btn_agregar_comision_rf').hide();
+            $('#btn_actualizar_comision_rf').show();
+            $('#modal_comision_rf_label').html("Actulizar Viaticos Comisión");
+            $('#modal_comision_rf').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**-----Suma de los viaticos----------------------------------------------- */
+function Suma_viaticos() {
+    // Obtén los valores de los inputs
+    var viatico = parseFloat($('#viatico').val().trim()) || 0;
+    var combustible = parseFloat($('#combustible').val().trim()) || 0;
+    var casetas = parseFloat($('#casetas').val().trim()) || 0;
+    var otros = parseFloat($('#otros').val().trim()) || 0;
+
+    // Verifica si todos los inputs tienen valor
+    if (isNaN(viatico) || viatico <= 0) {
+        $('#viatico').val('00.00');
+    }
+    if (isNaN(combustible) || combustible <= 0) {
+        $('#combustible').val('00.00');
+    }
+    if (isNaN(casetas) || casetas <= 0) {
+        $('#casetas').val('00.00');
+    }
+    if (isNaN(otros) || otros <= 0) {
+        $('#otros').val('00.00');
+    }
+    // Restaurar todos los campos de entrada primero (por si acaso)
+    $('#input_especificar_rf').hide();
+    $('#especificar').val('').prop('disabled', true);
+
+    if (otros > 0) {
+        $('#input_especificar_rf').show();
+        $('#especificar').prop('disabled', false);
+    } else {
+        $('#input_especificar_rf').hide();
+        $('#especificar').prop('disabled', true);
+    }
+
+    var url = $('#url_suma_total').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { viatico: viatico, combustible: combustible, casetas: casetas, otros: otros },
+        success: function (data) {
+            var valcor = JSON.parse(data);
+            $('#total').val(valcor[0]);
+            return false;
+        }
+    });
+
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Funcion para asignar un vehiculo al comisionado------------------------- */
+function Parque_comision(id_parque, id_comision){
+    Fechas_horas_pv(id_comision);
+    if(id_parque > 0){
+        Modificar_parque_comision(id_parque);
+    }else{
+        $('#form_comision_pv')[0].reset();
+        $('#id_comision_pv').val(id_parque);
+        $('#comision_id_comision_pv').val(id_comision);
+        $('#proceso_comision_pv').val('Registro')
+        $('#alert_error_pv').hide();
+        $('#especificar, #vehiculo_comision, #placas, #km_inicial').prop('disabled', false);
+        $('#input_especificar_pv, #select_id_vehiculo, #input_placas, #input_km_inicial').hide();
+        $('#vehiculo_comision').selectpicker('val', '');
+        $('#btn_agregar_comision_pv').show();
+        $('#btn_actualizar_comision_pv').hide();
+        $('#modal_comision_pv_label').html('Agregar Vehiculo Comisión')
+        $('#modal_comision_pv').modal('show');
+    }  
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Fecha y hora para el parque vehicular----------------------------------- */
+function Fechas_horas_pv(id){
+    var url = $('#url_fecha_hora_pv').val();
+    $.ajax({
+        type: 'POST',
+        url:url,
+        data:{id:id},
+        success:function(data){
+            var logan = JSON.parse(data);
+            $('#f_ini_pv').val(logan[0]);
+            $('#f_fin_pv').val(logan[1]);
+            $('#h_ini_pv').val(logan[2]);
+            $('#h_fin_pv').val(logan[3]);
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Funcion para registrar un automivil a la comision----------------------- */
+function Registrar_comision_pv(){
+    $.ajax({
+        type:'POST',
+        url:$('#form_comision_pv').attr('action'),
+        data:$('#form_comision_pv').serialize(),
+        success:function(data){
+            var array = JSON.parse(data);
+            var comprobar = array[0];
+            if($('#proceso_comision_pv').val() == 'Registro'){
+                if(comprobar == 0){
+                    $('#modal_comision_pv').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Agregado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    Pagination_comision(1);
+                    return false;
+                }else{
+                    $('#alert_error_pv').show();
+                }
+            }else{
+                if(comprobar == 0){
+                    $('#modal_comision_pv').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Actualizado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    Pagination_comision(1);
+                    return false;
+                }else{
+                    $('#alert_error_pv').show();
+                }
+            }
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**--Modificar Parque Comision--------------------------------------------- */
+function Modificar_parque_comision(id_parque){
+    $('#form_comision_pv')[0].reset();
+    var url = $('#url_modificar_vehiculo').val();
+    $.ajax({
+        type: 'POST',
+        url:url,
+        data: 'id='+id_parque,
+        success:function(data){
+            var peito = JSON.parse(data);
+            $('#proceso_comision_pv').val('Edicion');
+            $('#id_comision_pv').val(peito[0]);
+            $('#comision_id_comision_pv').val(peito[1]);
+            $('#tipo_vehiculo').val(peito[2]).change();
+            $('#especificar_vehiculo').val(peito[3]);
+            $('#vehiculo_comision').selectpicker('val', peito[4]).change();
+            //$('#placas').val(peito[5]); 
+            $('#km_inicial').val(peito[5]);
+            $('#alert_error_pv').hide();
+            $('#btn_agregar_comision_pv').hide();
+            $('#btn_actualizar_comision_pv').show();
+            $('#modal_comision_pv_label').html("Actulizar Vehiculo Comisión");
+            $('#modal_comision_pv').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Paginacion para los input del parque vehicular de comision-------------- */
+function Pagination_tipo_vehiculo(){
+    var tipo = $('#tipo_vehiculo').val();
+   //Restaurar todos los campos de entrada primero (por si acaso)
+   $('#especificar, #vehiculo_comision, #placas, #km_inicial').prop('disabled', false);
+   $('#input_especificar_pv, #select_id_vehiculo, #input_placas, #input_km_inicial').hide();
+    
+    
+   //Verificar la seleccion y mostrar/habilitar campos de entrada según corresponda
+   if(tipo.indexOf('1') !== -1 ){
+       //$('#especificar').prop('disabled', false);
+       //$('#input_especificar_pv').show();
+       $('#vehiculo_comision').selectpicker('val', '');
+        $('#placas').val("");
+        $('#km_inicial').val("");  
+        $('#especificar_vehiculo').val("");
+   }else if(tipo.indexOf('2') !== -1 ){
+        $('#vehiculo_comision, #placas, #km_inicial').prop('disabled', false);
+        $('#select_id_vehiculo, #input_placas, #input_km_inicial').show();
+        $('#vehiculo_comision').selectpicker('val', '');
+        $('#placas').val("");
+        $('#km_inicial').val("");  
+        $('#especificar_vehiculo').val("");
+    }else if(tipo.indexOf('3') !== -1){
+        $('#especificar_vehiculo').prop('disabled', false);
+        $('#input_especificar_pv').show();
+        $('#vehiculo_comision').selectpicker('val', '');
+        $('#placas').val("");
+        $('#km_inicial').val("");  
+        $('#especificar_vehiculo').val("");
+    }
+    return false;
+
+};
+/**------------------------------------------------------------------------ */
+/**Funcion para obtener los vehiculos dados de alta en el PV--------------- */
+function Pagination_vehiculo_comision(partida){
+    var url = $('#url_buscar_vehiculo').val();
+    /*$('#especificar').reset();
+    $('#vehiculo_comision').selectpicker('val', '');
+    $('#placas').reset();
+    $('#km_inicial').reset();   */
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{partida:partida},
+        success:function(data){
+            var array = JSON.parse(data);
+            $('#vehiculo_id_vehiculo').html(array[0]);
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Funcion para manejar el llenado de placas y kilometraje----------------- */
+function Datos_vehiculo(){
+    var url = $('#url_datos_vehiculo').val();
+    var carro = $('#vehiculo_comision').val();
+    $.ajax({
+        type: 'POST',
+        url:url,
+        data:{carro:carro},
+        success:function(data){
+            var mishos = JSON.parse(data);
+            $('#placas').val(mishos[0]);
+            $('#km_inicial').val(mishos[1]);
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Paginacion del compacto de comisiones----------------------------------- */
+function Pagination_compacto_comision(partida){
+    var url = $('#url_paginar').val();
+    var dato = $('#busqueda').val();
+    var ideliminar = '0';
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{ideliminar: ideliminar, dato:dato, partida:partida},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            return false;
+        }        
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Modal para agregar una nueva compactasion------------------------------- */
+function Modal_configuracion_compacto_comision(){
+    $('#form_compacto_comision')[0].reset();
+    $('#id_comisiones').selectpicker('val', '');
+    $('#id_departamentos').selectpicker('val', '');
+    $('#proceso').val('Registro');
+    $('#alert_error').hide();
+    $('#alert_error_2').hide();
+    $('#btn_registrar').show();
+    $('#input_km_2').hide();
+    $('.inputs_vehiculo_comision').show();
+    $('#btn_actualizar').hide();
+    $('#modal_compacto_comision_label').html("Registrar Compacto de Comisiones");
+    $('#modal_compacto_comision').modal('show');
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Funcion Registro /Edicion del compacto de comision---------------------- */
+function Registrar_compacto_comision(){
+    $.ajax({
+        type:'POST',
+        url:$('#form_compacto_comision').attr('action'),
+        data:$('#form_compacto_comision').serialize(),
+        success:function(data){
+            var array = JSON.parse(data);
+            var comprobar = array[3];
+            if($('#proceso').val() == 'Registro'){
+                if(comprobar == 0){
+                    $('#modal_compacto_comision').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Agregado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error').show();
+                }
+            }else{
+                if(comprobar == 0){
+                    $('#modal_compacto_comision').modal('toggle');
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Actualizado Correctamente',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    return false;
+                }else{
+                    $('#alert_error').show();
+                }
+            }
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Select para mostar todas la comisiones y seleccionar-------------------- */
+function Pagination_comisiones_select(partida){
+    var url = $('#url_buscar_comisiones').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data:{partida:partida},
+        success:function(data){
+            //var josan = JSON.parse(data);
+            $('#comision_id_comision').html(data);
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**---------Buscar las gasolinas para comision----------------------------- */
+function Buscar_gasolina_comision(partida){
+    var url = $('#url_gasolina_comision').val();
+    $.ajax({
+        type: 'POST',
+        url: url, 
+        data:{partida:partida},
+        success:function(data){
+            var corona = JSON.parse(data);
+            $('#tipo_gasolina').html(corona[0]);
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**------Buscar los departamentos para la comision------------------------- */
+function Pagination_departamentos_comision_select(partida){
+    var url = $('#url_departamentos_comision').val();
+    $.ajax({
+        type: 'POST',
+        url: url, 
+        data:{partida:partida},
+        success:function(valcor){
+            //var valle = JSON.parse(data);
+            $('#departamento_id_departamento').html(valcor);
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**----Funcion para validar los vehiculos de las comisiones seleccionadas-- */
+function Validar_comisiones_vehiculo(){
+    var url = $('#url_validar_comision').val();
+    var comisiones = $('#id_comisiones').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data:{comisiones:comisiones},
+        success:function(datos){
+            var cacheton = JSON.parse(datos);
+            var comprobar = cacheton[0];
+            if (comprobar == 0){
+                $('#nombre_vehiculo').val(cacheton[1]);
+                $('#km_inicial').val(cacheton[2]);
+                $('#id_vehiculo').val(cacheton[3]);
+                $('#alert_error_2').hide();
+                $('.inputs_vehiculo_comision').show();
+            }else{
+                $('#nombre_vehiculo').val('');
+                $('#km_inicial').val('');
+                $('#id_vehiculo').val('0');
+                $('#km_final').val('');
+                $('#km_recorridos').val('');
+                $('#casetas').val('');
+                $('#combustible').val('');
+                $('#tipo_gasolina').val('');
+                $('#id_departamentos').selectpicker('val', '');
+                $('.inputs_vehiculo_comision').hide();
+                $('#alert_error_2').show();
+            } 
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Funcion para obtener los kilometros recorridos del vehiculo------------- */
+function Obtener_km_recorridos(){
+    var inicio = parseFloat($('#km_inicial').val().trim()) || 0;
+    var fin = parseFloat($('#km_final').val().trim()) || 0;
+    var url = $('#url_suma_kilometros').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { inicio:inicio, fin:fin },
+        success: function (data) {
+            var valcor = JSON.parse(data);
+            var km_recorrido = valcor[0];
+            if(km_recorrido >= 0){
+                $('#km_recorridos').val(km_recorrido);
+            }else{
+                swal({
+                    title: '¡Error!',
+                    text: 'El Kilometraje Final tiene que ser mayor al Kilometraje Inicial',
+                    type: 'error',
+                    /*showConfirmButton: false,
+                    timer: 1500*/
+                })
+                $('#km_final').val('');
+                $('#km_recorridos').val('');
+            }
+            
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**---Funcion para modificar el compacto----------------------------------- */
+function Actualizar_compacto_comision(id){
+    $('#form_compacto_comision')[0].reset();
+    var url = $('#url_modificar').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: {id:id},
+        success:function(data){
+            var cachetonypolar = JSON.parse(data);
+            $('#proceso').val('Edicion');
+            $('#id').val(cachetonypolar[0]);
+            $('#id_vehiculo').val(cachetonypolar[1]);
+            $('#id_comisiones').selectpicker('val', cachetonypolar[2]);
+            $('#km_inicial').val(cachetonypolar[3]);
+            $('#km_final').val(cachetonypolar[4]);
+            $('#km_recorridos').val(cachetonypolar[5]);
+            $('#casetas').val(cachetonypolar[6]);
+            $('#combustible').val(cachetonypolar[7]);
+            $('#tipo_gasolina').val(cachetonypolar[8]).change();
+            $('#id_departamentos').selectpicker('val', cachetonypolar[9]).change();
+            $('#nombre_vehiculo').val(cachetonypolar[10]);
+            //$('#input_km_inicial').hide();
+            //$('#input_km_2').show();
+            $('#alert_error').hide();
+            $('#alert_error_2').hide();
+            $('#btn_registrar').hide();
+            $('#btn_actualizar').show();
+            $('#modal_compacto_comision_label').html("Actulizar Compacto Comisión");
+            $('#modal_compacto_comision').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**-----Funcion para eliminar el compacto de comisiones-------------------- */
+function Eliminar_compacto_comision(ideliminar){
+    var url = $('#url_paginar').val();
+    var dato = '';
+    var partida = '1';
+
+    swal({
+        title: "Eliminar Comisión?",
+        text: "El registro se eliminara de forma permanente!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirmar!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+        cancelButtonText: "Cancelar"
+    },
+
+    function(isConfirm){
+        if (isConfirm) {
+
+           $.ajax({
+                type:'POST',
+                url:url,
+                data: {ideliminar: ideliminar, dato: dato, partida: partida},
+                success:function(data){
+                    var array = eval(data);
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Eliminado con Éxito',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    return false;
+                }
+            });    
+
+        }else{
+            swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**--------Funcion para mostar el catalogo de las comisiones--------------- */
+function Pagination_catalogo_comsiones(partida){
+    var url = $('#url_paginar').val();
+    var fecha_inicial = $('#fInicio').val();
+    var fecha_final = $('#fFin').val();
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{partida:partida, fecha_inicial:fecha_inicial, fecha_final:fecha_final},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            return false;
+        }        
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**-------Funcion para mostar el modal de los pagos------------------------ */
+function Modal_configuracion_pago(){
+    $('#form_pagos')[0].reset();
+    $('#proceso_pagos').val('Registro');
+    $('btn_agregar_pagos').show();
+    $('#btn_actualizar_pagos').hide();
+    $('#modal_pagos_label').html("Registrar Pago(s)");
+    $('#modal_pagos').modal('show');
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**-------Función para descargar la plantilla de excel--------------------- */
+function Descargar_plantilla_pagos(){
+    var url = $('#url_descargar_plantilla_pagos').val();
+    $.ajax({
+        url: url,
+        method: 'GET',
+        xhrFields: {
+            responseType: 'blob' //Indica que se espera un blob
+        },
+        success: function(data){
+            //crea un enlace temporal para descargar el archivo
+            const url = window.URL.createObjectURL(new Blob([data]));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'plantilla_pagos.xlsx'    //nombre del archivo
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);// Libera la URL del blob
+            $('#modal_pagos').modal('toggle');
+            swal({
+                title: 'Proceso Terminado',
+                text: 'Archivo Descargado Correctamente',
+                type: 'success',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.error('Error al descargar el archivo: ', textStatus, errorThrown);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ocurrio un error en la descargar, Intentelo nuevamente!"
+            });
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**-------Funcion para la paginación de los pagos-------------------------- */
+function Pagination_pagos(partida){
+    var url = $('#url_paginar').val();
+    var dato = $('#busqueda').val();
+    var ideliminar = '0';
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data:{ideliminar:ideliminar, dato:dato, partida:partida},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**-------Función para registrar los pagos de manera masiva---------------- */
+function Registrar_pagos(){
+    var archivoPagos = $('#archivo_pagos').val();
+    if(archivoPagos == ""){
+        swal({
+            title: 'Incorrecto',
+            text: 'Tiene que seleccionar un archivo',
+            type: 'error',
+            showConfirmButton: true
+        });
+        return false;
+    }else{
+        var formPago = new FormData($("#form_pagos")[0]);
+        //Deshabilitar el boton de envio durante el mismo
+        $('#btn_agregar_pagos').prop('disabled', true);
+        $('#btn_agregar_pagos').html('<span class="spinner-grow spinner-grow-sm text-light" aria-hidden="true"></span><span role="status"> Cargando...</span>');
+        $('#progress-container').show(); //Mostramos el contenedor de progreso
+        $.ajax({
+            type: 'POST',
+            url: $('#form_pagos').attr('action'),
+            data: formPago,
+            processData: false,
+            contentType: false,
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                
+                // Escuchar el evento de progreso
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = Math.round((evt.loaded / evt.total) * 100); // Porcentaje completado
+    
+                        // Mostrar el progreso en la barra y en el texto dentro de la barra
+                        $('#progress-bar').css('width', percentComplete + '%'); // Actualizar la barra de progreso
+                        $('#progress-bar').attr('aria-valuenow', percentComplete); // Actualizar el valor aria
+                        $('#progress-percent').text(percentComplete + '%'); // Mostrar el porcentaje dentro de la barra
+                        $('#progress-container').show(); // Asegurarse de que la barra de progreso esté visible
+                    }
+                }, false);
+                
+                return xhr;
+            },
+            beforeSend: function() {
+                // Reiniciar la barra de progreso y mostrar el mensaje de carga
+                $('#progress-container').show();
+                $('#progress-bar').css('width', '0%');
+                $('#progress-bar').attr('aria-valuenow', '0');
+                $('#progress-percent').text('0%');
+                $('#status-text').text('Cargando archivo...').show(); // Mostrar el mensaje de carga
+            },
+            success:function(data){
+                var array = JSON.parse(data);
+                var comprobar = array[0];
+                $('#btn_agregar_pagos').prop('disabled', false); //habilitar el boton de envio ddespues de la carga del archivo
+                $('#btn_agregar_pagos').html('Registrar');//Regresamos el button a la normalidad
+                //$('#progress-container').hide();//Ocultamos el contenedor de la barra de progreso
+                setTimeout(function(){
+                    $('#progress-container').hide();//ocultar la barra de progreso
+                },2000);//esperar dos segundos
+                if($('#proceso_pagos').val() == 'Registro'){
+                    switch (comprobar){
+                        case "0":
+                            $('#modal_pagos').modal('toggle');
+                            $('#form_pagos')[0].reset();
+                            swal({
+                                title: 'Correcto',
+                                text: 'Registros Almacenados con Éxito',
+                                type: 'success',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            Pagination_pagos(1);
+                            return false;
+                        break;
+                        case "1":
+                            swal({
+                                title: 'Incorrecto',
+                                text: 'Solo se admiten archivos .XLSX!',
+                                type: 'error',
+                                showConfirmButton: true
+                            });
+                            $('#form_pagos')[0].reset();
+                            return false;
+                        break;
+                        case "2":
+                            swal({
+                                title: 'Incorrecto',
+                                text: 'Hubo un error en la carga del archivo, intente nuevamente',
+                                type: 'error',
+                                showConfirmButton: true
+                            });
+                            $('#form_pagos')[0].reset();
+                            return false;
+                        break;
+                        default:
+                            swal({
+                                title: 'Incorrecto',
+                                text: 'Hubo un error en la subida de información, intente nuevamente',
+                                type: 'error',
+                                showConfirmButton: true
+                            });
+                            $('#form_pagos')[0].reset();
+                            return false;
+                    }
+                }
+            }    
+        });
+    }
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**-------Funcion para mostrar el detalle de cada Pago almacenado---------- */
+function Examina_detalle_pago(idpago){
+    $('#contenido_pagina').load("modulos/detalle_pago.php", function Detalle_procesado_pago(){
+        var url = "php/pagos/consulta_detalle_pago.php";
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data:{idpago: idpago},
+            success:function(data){
+                var polarcito = JSON.parse(data);
+                $('#detalle_del_pago').html(polarcito[0]);
+                $('#x_pago').val(polarcito[2]);
+                Pagination_detalles_pago(1);//llamamos a la funcion para que cargue cuando ya exista el valor de x_pago
+                return false;
+            }
+        });
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**----Funcion para paginar el detalle de pagos --------------------------- */
+function Pagination_detalles_pago(partida){
+    var url = $('#url_paginar').val();
+    //var dato = $('#select_busqueda_detalle_pago').val();
+    var id_pago = $('#x_pago').val();
+    var ideliminar = '0';
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{partida:partida, ideliminar:ideliminar, id_pago: id_pago},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
+            $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+            /*$('#pagination_info').html(array[1]);
+            $('#pagination').html(array[2]);
+            
+            if(dato > 0){
+                $('#buscar_detalle_pago')[0].reset();
+            }*/
+            return false;
+        }        
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**--------Funcion para el modal del detalle de pago*-*-------------------- */
+function Modal_configuracion_detalle_pago(){
+    $('#form_detalle_pago')[0].reset();
+    $('#id_departamentos').selectpicker('val', '');
+    $('#proceso_detalle_pago').val('Registro');
+    $('#btn_agregar_detalle_pago').show();
+    $('#btn_actualizar_detalle_pago').hide();
+    $('#aler_detalle_pago').hide();
+    $('#modal_detalle_pagos_label').html('Registrar Nuevo Detalle de Pago');
+    $('#modal_detalle_pagos').modal('show');
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**Nuevas Funciones para Registrar el Detalle de Pago---------------------- */
+function mostrarMensaje(comprobar, accion) {
+    if (comprobar == 0) {
+        $('#modal_detalle_pagos').modal('toggle');
+        swal({
+            title: 'Proceso Terminado',
+            text: accion === 'Registro' ? 'Registro Agregado Correctamente' : 'Registro Actualizado con Éxito',
+            type: 'success',
+            showConfirmButton: false,
+            timer: 1500
+        });
+        Pagination_detalles_pago(1);
+        return false;
+    } else if (comprobar == 1) {
+        $('#aler_detalle_pago').show();
+        $('#monto_detalle_pago').val('');
+        return false;
+    } 
+}
+/***----------------------------------------------------------------------- */
+function Registrar_detalle_pago(){
+    var monto_detalle = $('#monto_detalle_pago').val();
+    var departamento = $('#id_departamentos').val();
+    var regex = /^\d{1,10}(\.\d{0,2})?$/;
+
+    if(monto_detalle === ''){
+        swal({
+            title: 'Incorrecto',
+            text: 'El Monto del Detalle Pago es obligatorio',
+            type: 'error',
+            showConfirmButton: true
+        });
+        return false;
+    } else if(!regex.test(monto_detalle)){
+        swal({
+            title: 'Incorrecto',
+            text: 'Solo se admiten un total de 10 números antes del punto decimal y solo 2 decimales',
+            type: 'error',
+            showConfirmButton: true
+        });
+        $('#monto_detalle_pago').val('');
+        return false;
+    } else if(departamento === ''){
+        swal({
+            title: 'Incorrecto',
+            text: 'Seleccione un departamento, es obligatorio',
+            type: 'error',
+            showConfirmButton: true
+        });
+        return false;
+    } else {
+        var form_detalle_pago = $('#form_detalle_pago').serializeArray(); 
+        var id_pago_padre = $('#x_pago').val();
+        form_detalle_pago.push({ name: 'id_pago_padre', value: id_pago_padre });
+
+        $.ajax({
+            type: 'POST',
+            url: $('#form_detalle_pago').attr('action'),
+            data: form_detalle_pago,
+            success: function(data) {
+                var array = JSON.parse(data);
+                var comprobar = array[0];
+                var accion = $('#proceso_detalle_pago').val();  // 'Registro' o 'Actualización'
+                mostrarMensaje(comprobar, accion);  // Pasamos el valor de 'Registro' o 'Actualización'
+            }
+        });
+    }
+    return false;
+}
+/**------------------------------------------------------------------------ */
+/*Funcion para manejar el Registro/Eliminacion de los PE de detalle de pagos */
+function Manejar_pe_detalle_pago(id_pago, isChecked){
+    var url = $('#form_pe_pagos').attr('action');
+    var mensaje = isChecked ? "Registrar los P.E.?" : "Eliminar los P.E.?";
+    var confirmText = isChecked ? "Confirmar!" : "Confirmar!";
+    var nuevoEstado = isChecked ? 0 : 1;
+    swal({
+        title: mensaje,
+        text: "El registro se modificará de forma permanente.",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6D55",
+        confirmButtonText: confirmText,
+        cancelButtonText: "Cancelar",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }, function(isConfirm){
+        if(isConfirm){
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data:{id_pago: id_pago, nuevoEstado: nuevoEstado},
+                success:function(data){
+                    var respuesta = JSON.parse(data);
+                    if(respuesta[0] == 0){
+                        Pagination_pagos(1);
+                        swal({
+                            title: "Proceso Terminado",
+                            text: "Registro Modificaco con Éxito",
+                            type: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        return false;
+                    }else{
+                        swal("Ocurrió un error", "Inténtelo Nuevamente", "error");
+                        return false;
+                    }
+                }
+            });
+        }else{
+            //para detener la ejecucion del proceso y que no se termine de habilitar o deshabilitar el check
+            //$('#pe_input').attr('checked', !isChecked);
+            Pagination_pagos(1);
+            swal("Proceso Cancelado", "No se ha efectuado ningún cambio", "error");
+        }
+    });  
+    return false;
+};
+/**------------------------------------------------------------------------- */
+/**----------Funcion para traer los departamentos de estructura organica--- */
+function Paginacion_departamento_detalle_pago(partida){
+    var url = $('#url_paginar_departamentos').val();
+    $.ajax({
+        type: 'POST',
+        url: url, 
+        data:{partida:partida},
+        success:function(cachetoncito){
+            $('#departamento_select_departamento').html(cachetoncito);
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**----------Función para actualiza/modificar el Detalle de pago----------- */
+function Actualizar_detalle_pago(id){
+    $('#form_detalle_pago')[0].reset();
+    $('#x_pago').val('');
+    var url = $('#url_modificar').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data:{id:id},
+        success:function(data){
+            var pamesitha = JSON.parse(data);
+            $('#aler_detalle_pago').hide();
+            $('#proceso_detalle_pago').val('Edicion');
+            $('#id_detalle_pago').val(pamesitha[0]);
+            $('#id_departamentos').selectpicker('val', pamesitha[1]).change();
+            $('#monto_detalle_pago').val(pamesitha[2]);
+            $('#x_pago').val(pamesitha[3]);
+            $('#btn_agregar_detalle_pago').hide();
+            $('#btn_actualizar_detalle_pago').show();
+            $('#modal_detalle_pagos_label').html("Actualizar Detalle Pago");
+            $('#modal_detalle_pagos').modal('show');
+            return false;
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**------------Función para eliminar el detalle de pago-------------------- */
+function Eliminar_detalle_pago(ideliminar){
+    var url = $('#url_paginar').val();
+    var partida = '1';
+    var id_pago = '0';
+    swal({
+        title: "Eliminar Detalle de Pago?",
+        text: "El registro se eliminara de forma permanente!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirmar!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+        cancelButtonText: "Cancelar"
+    },
+    function(isConfirm){
+        if(isConfirm){
+            $.ajax({
+                type: 'POST',
+                url:url,
+                data:{ideliminar:ideliminar, partida:partida, id_pago:id_pago},
+                success:function(data){
+                    var pachito = JSON.parse(data);
+                    Pagination_detalles_pago(1);
+                    swal({
+                        title: 'Proceso Terminado',
+                        text: 'Registro Eliminado con Éxito',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    return false;
+                }
+            });
+        }else{
+            swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
+        }
+    });
     return false;
 };
 /**------------------------------------------------------------------------ */

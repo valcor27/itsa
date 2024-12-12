@@ -7,7 +7,7 @@
     $consulta = "SELECT expediente, primerApellido, segundoApellido, 
     nombres, sexo, fNaci, rfc, curp, contrasena, celular, mailP, 
     mailI, fAlta, nivel_idNivelUsuario, plaza_codigoPlaza, 
-    estructuraReportada, estructuraReal FROM empleados 
+    estructuraReportada, estructuraReal, hora_entrada, hora_salida FROM empleados 
     WHERE expediente = '$id' LIMIT 1";
     $resultado = mysqli_query($conexion_database, $consulta);
     $datos = array();
@@ -29,6 +29,8 @@
         $plaza_codigoPlaza = $row['plaza_codigoPlaza'];
         $estructuraReportada = $row['estructuraReportada'];
         $estructuraReal = $row['estructuraReal'];
+        $hora_entrada = date("H:i", strtotime($row['hora_entrada']));
+        $hora_salida = date("H:i", strtotime($row['hora_salida']));
     }
     $datos = array(
         0 => $expediente,
@@ -47,7 +49,9 @@
         13 => $nivel_idNivelUsuario,
         14 => $plaza_codigoPlaza,
         15 => $estructuraReportada,
-        16 => $estructuraReal
+        16 => $estructuraReal,
+        17 => $hora_entrada,
+        18 => $hora_salida
     );
     /**------------------------------------------------- */
     echo json_encode($datos);

@@ -191,7 +191,7 @@
 									<label for="nivel_usuario" class="form-label">Tipo de Usuario</label>
 									<div class="input-group mb-3">
 										<span class="input-group-text"><i class="fa-regular fa-address-book"></i></span>
-										<select class="form-select" name="nivel_usuario" id="nivel_usuario" aria-label="Default select example" required="">
+										<select class="form-select" name="nivel_usuario" id="nivel_usuario" aria-label="Default select example" required="" onchange="return Pagination_inputs_empleados();">
 										<option selected disabled>Tipo de usuario</option>
 										<option value="1">Director General</option>
 										<option value="2">Director</option>
@@ -216,34 +216,34 @@
 									<div class="input-group mb-3">
 										<span class="input-group-text"><i class="fa-regular fa-address-book"></i></span>
 										<select class="form-select" name="unidadReal_usuario" id="unidadReal_usuario" aria-label="Default select example" required="">
-										<option selected disabled>Unidad Adscrito Real</option>
-										<option value="10000">Dirección General</option> 	
-										<option value="11000">Dirección Académica</option>
-										<option value="12000">Dirección de Planeación y Vinculación</option>
-										<option value="10100">Subdirección de Servicios Administrativos</option>
-										<option value="12100">Subdirección de Planeación </option>
-										<option value="12200">Subdirección de Vinculación</option>
-										<option value="11100">Subdirección de Posgrado e Investigación</option>
-										<option value="11200">Subdirección Académica</option>
-										<option value="10110">Departamento de Personal</option>
-										<option value="10120">Departamento de Recursos Financieros </option>
-										<option value="10130">Departamento de Recursos Materiales y Servicios</option>
-										<option value="12110">Departamento de Planeación y Programación</option>
-										<option value="12120">Departamento de Estadística y Evaluación</option>
-										<option value="12130">Departamento de Control Escolar</option>
-										<option value="12210">Departamento de Vinculación</option>
-										<option value="12220">Departamento de Difusión y Concertación</option>
-										<option value="12230">Departamento de Residencias Profesionales y Servicio Social</option>
-										<option value="11110">Departamento de Posgrado e Investigación</option>
-										<option value="11201">División de Ingeniería Bioquímica </option>
-										<option value="11202">División de Ingeniería Electromecánica</option>
-										<option value="11203">División de Gastronomía</option>
-										<option value="11204">División de Ingeniería en Sistemas Computacionales</option>
-										<option value="11205">División de Ingeniería Industrial</option>
-										<option value="11206">División de Ingeniería Mecatrónica</option>
-										<option value="11210">Departamento de Desarrollo Académico</option>
-										<option value="11220">Departamento de Ciencias Básicas</option>	 	 		
-									</select>
+											<option selected disabled>Unidad Adscrito Real</option>
+											<option value="10000">Dirección General</option> 	
+											<option value="11000">Dirección Académica</option>
+											<option value="12000">Dirección de Planeación y Vinculación</option>
+											<option value="10100">Subdirección de Servicios Administrativos</option>
+											<option value="12100">Subdirección de Planeación </option>
+											<option value="12200">Subdirección de Vinculación</option>
+											<option value="11100">Subdirección de Posgrado e Investigación</option>
+											<option value="11200">Subdirección Académica</option>
+											<option value="10110">Departamento de Personal</option>
+											<option value="10120">Departamento de Recursos Financieros </option>
+											<option value="10130">Departamento de Recursos Materiales y Servicios</option>
+											<option value="12110">Departamento de Planeación y Programación</option>
+											<option value="12120">Departamento de Estadística y Evaluación</option>
+											<option value="12130">Departamento de Control Escolar</option>
+											<option value="12210">Departamento de Vinculación</option>
+											<option value="12220">Departamento de Difusión y Concertación</option>
+											<option value="12230">Departamento de Residencias Profesionales y Servicio Social</option>
+											<option value="11110">Departamento de Posgrado e Investigación</option>
+											<option value="11201">División de Ingeniería Bioquímica </option>
+											<option value="11202">División de Ingeniería Electromecánica</option>
+											<option value="11203">División de Gastronomía</option>
+											<option value="11204">División de Ingeniería en Sistemas Computacionales</option>
+											<option value="11205">División de Ingeniería Industrial</option>
+											<option value="11206">División de Ingeniería Mecatrónica</option>
+											<option value="11210">Departamento de Desarrollo Académico</option>
+											<option value="11220">Departamento de Ciencias Básicas</option>	 	 		
+										</select>
 									</div>
 								</div>
 								<div class="col-md-4">
@@ -251,34 +251,48 @@
 									<div class="input-group mb-3">
 										<span class="input-group-text"><i class="fa-regular fa-address-book"></i></span>
 										<select class="form-select" name="unidadReportada_usuario" id="unidadReportada_usuario" aria-label="Default select example" required="">
-										<option selected disabled>Unidad Adscrito Reportada</option>
-										<option value="10000">Dirección General</option> 	
-										<option value="11000">Dirección Académica</option>
-										<option value="12000">Dirección de Planeación y Vinculación</option>
-										<option value="10100">Subdirección de Servicios Administrativos</option>
-										<option value="12100">Subdirección de Planeación </option>
-										<option value="12200">Subdirección de Vinculación</option>
-										<option value="11100">Subdirección de Posgrado e Investigación</option>
-										<option value="11200">Subdirección Académica</option>
-										<option value="10110">Departamento de Personal</option>
-										<option value="10120">Departamento de Recursos Financieros </option>
-										<option value="10130">Departamento de Recursos Materiales y Servicios</option>
-										<option value="12110">Departamento de Planeación y Programación</option>
-										<option value="12120">Departamento de Estadística y Evaluación</option>
-										<option value="12130">Departamento de Control Escolar</option>
-										<option value="12210">Departamento de Vinculación</option>
-										<option value="12220">Departamento de Difusión y Concertación</option>
-										<option value="12230">Departamento de Residencias Profesionales y Servicio Social</option>
-										<option value="11110">Departamento de Posgrado e Investigación</option>
-										<option value="11201">División de Ingeniería Bioquímica </option>
-										<option value="11202">División de Ingeniería Electromecánica</option>
-										<option value="11203">División de Gastronomía</option>
-										<option value="11204">División de Ingeniería en Sistemas Computacionales</option>
-										<option value="11205">División de Ingeniería Industrial</option>
-										<option value="11206">División de Ingeniería Mecatrónica</option>
-										<option value="11210">Departamento de Desarrollo Académico</option>
-										<option value="11220">Departamento de Ciencias Básicas</option>	 
-									</select>
+											<option selected disabled>Unidad Adscrito Reportada</option>
+											<option value="10000">Dirección General</option> 	
+											<option value="11000">Dirección Académica</option>
+											<option value="12000">Dirección de Planeación y Vinculación</option>
+											<option value="10100">Subdirección de Servicios Administrativos</option>
+											<option value="12100">Subdirección de Planeación </option>
+											<option value="12200">Subdirección de Vinculación</option>
+											<option value="11100">Subdirección de Posgrado e Investigación</option>
+											<option value="11200">Subdirección Académica</option>
+											<option value="10110">Departamento de Personal</option>
+											<option value="10120">Departamento de Recursos Financieros </option>
+											<option value="10130">Departamento de Recursos Materiales y Servicios</option>
+											<option value="12110">Departamento de Planeación y Programación</option>
+											<option value="12120">Departamento de Estadística y Evaluación</option>
+											<option value="12130">Departamento de Control Escolar</option>
+											<option value="12210">Departamento de Vinculación</option>
+											<option value="12220">Departamento de Difusión y Concertación</option>
+											<option value="12230">Departamento de Residencias Profesionales y Servicio Social</option>
+											<option value="11110">Departamento de Posgrado e Investigación</option>
+											<option value="11201">División de Ingeniería Bioquímica </option>
+											<option value="11202">División de Ingeniería Electromecánica</option>
+											<option value="11203">División de Gastronomía</option>
+											<option value="11204">División de Ingeniería en Sistemas Computacionales</option>
+											<option value="11205">División de Ingeniería Industrial</option>
+											<option value="11206">División de Ingeniería Mecatrónica</option>
+											<option value="11210">Departamento de Desarrollo Académico</option>
+											<option value="11220">Departamento de Ciencias Básicas</option>	 
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4 columna_horario_admon" style="display: none;" id="hora_entrada_a">
+									<label for="hora_entrada_admon" class="form-label">Hora Entrada</label>
+									<div class="input-group mb-3">
+										<span class="input-group-text"><i class="fa-regular fa-clock"></i></span>
+										<input type="time" id="hora_entrada_admon" name="hora_entrada_admon" class="form-control" placeholder="Hora Entrada" aria-label="Hora Entrada" aria-describedby="basic-addon1" disabled>
+									</div>
+								</div>
+								<div class="col-md-4 columna_horario_admon" style="display: none;" id="hora_salida_a">
+									<label for="hora_salida_admon" class="form-label">Hora Salida</label>
+									<div class="input-group mb-3">
+										<span class="input-group-text"><i class="fa-regular fa-clock"></i></span>
+										<input type="time" id="hora_salida_admon" name="hora_salida_admon" class="form-control" placeholder="Hora Salida" aria-label="Hora Salida" aria-describedby="basic-addon1" disabled>
 									</div>
 								</div>
 								<div class="col-md-10" id="alert_error">
@@ -507,13 +521,15 @@
 			$(function () {
         		$("#fNaci").datepicker({
             		language: 'es',
-					format: 'dd-mm-yyyy'
+					format: 'dd-mm-yyyy',
+					autoclose: 'true'
         		});
     		});
 			$(function () {
         		$("#fAlta").datepicker({
             		language: 'es',
-					format: 'dd-mm-yyyy'
+					format: 'dd-mm-yyyy',
+					autoclose: 'true'
         		});
     		});
         });

@@ -18,8 +18,8 @@
             $grupo_idgrupo = $row['grupo_idgrupo'];
             $materia_idmateria = $row['materia_idmateria'];
             $clave_docente = $row['clave_docente'];
-            $hora_entrada = $row['hora_entrada'];
-            $hora_salida = $row['hora_salida'];
+            $hora_entrada = date("H:i", strtotime($row['hora_entrada']));
+            $hora_salida = date("H:i", strtotime($row['hora_salida']));
             $punto = $row['punto'];
             $hora = $hora_entrada.'-'.$hora_salida;
         }

@@ -13,6 +13,8 @@
 <input type="hidden" id="url_modificar" name="url_modificar" value="php/documento_ssa/modificar.php">
 <input type="hidden" id="url_documento_envio" name="url_documento_envio" value="php/documento_ssa/documento_envio.php">
 <input type="hidden" id="url_historial_documento" name="url_historial_documento" value="php/documento_ssa/documento_historial.php">
+<input type="hidden" id="url_descargar_documento" name="url_descargar_documento" value="php/documento_ssa/descargar_documento.php">
+<!--<input type="hidden" id="url_descargar_reporte" name="url_descargar_reporte" value="php/documento_ssa/descargar_reporte.php">-->
     <main id="contenido_pagina">
         <div class="container mt-5">
             <div class="wrraper">
@@ -34,7 +36,7 @@
 													<button class="btn btn-outline-light" type="submit" id="button-addon2">Buscar</button>
 												</div>  
 											</form>
-										</div>
+										</div> 
 										<div class="col-auto">
 											<div class="d-flex justify-content-end ps-3 me-5">
 												<button type="button" class="btn btn-outline-light" onclick="Modal_configuracion_documentos();">
@@ -49,8 +51,24 @@
 								<div class="card-body px-0 pb-2">
 									<div class="card mb-4">
 										<div class="card-header cheader">
-											<i class="fas fa-folder-open"></i>
-											Listado de Registros
+											<div class="row align-items-center">
+												<div class="col-md-6 col-sm-12">
+													<div class="mb-0 card-title h5">
+														<i class="fas fa-folder-open"></i>
+														Listado de Registros
+													</div>
+												</div>
+												<div class="col-md-6 col-sm-12">
+													<div class="row justify-content-evenly">
+														<div class="col-md-6">
+															<div class="card-actions float-end" id="button_reporte_ssa_ex"></div>
+														</div>
+														<div class="col-md-6">
+															<div class="card-actions float-end" id="button_reporte_ssa"></div>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 										<div class="card-body">
 											<div id="agrega-registros">Datos Tabla</div>     
@@ -288,7 +306,8 @@
 			$(function () {
         		$("#fCrea").datepicker({
             		language: 'es',
-					format: 'dd-mm-yyyy'
+					format: 'dd-mm-yyyy',
+					autoclose: 'true'
         		});
     		});
         });

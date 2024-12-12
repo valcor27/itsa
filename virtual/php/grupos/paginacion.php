@@ -101,7 +101,7 @@
     }
     /**---------------------------------------------------------- */
     /**Consulta Bd para mostrar registros encontrados------------ */
-    $consulta_2 = "SELECT id_grupo AS id, nombre_grupo, nombre_division FROM grupo WHERE nombre_grupo LIKE '%$dato%' AND estatus = '1' ORDER BY nombre_division ASC LIMIT $limit, $nroLotes";
+    $consulta_2 = "SELECT id_grupo AS id, nombre_grupo, nombre_division FROM grupo WHERE nombre_grupo LIKE '%$dato%' AND estatus = '1' ORDER BY nombre_division, nombre_grupo ASC LIMIT $limit, $nroLotes";
     $registro_2 = mysqli_query($conexion_database, $consulta_2);
     /*if (!$registro_2) {
         die("Error en la consulta: " . mysqli_error($conexion_database));

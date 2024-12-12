@@ -28,7 +28,7 @@
     switch ($proceso) {
         case 'Registro':
             /**Corroboramos que no se duplique el expediente del docente */
-            $consulta_comparar = "SELECT id_docentes FROM docentes WHERE empleados_expediente = '$expediente' AND estatus = '1' LIMIT 1";
+            $consulta_comparar = "SELECT id_docentes FROM docentes WHERE (empleados_expediente = '$expediente' OR clave = '$clave') AND estatus = '1' LIMIT 1";
             $resultado_comparar = mysqli_query($conexion_database, $consulta_comparar);
             $filas_comparar = mysqli_num_rows($resultado_comparar);
             mysqli_free_result($resultado_comparar);
@@ -47,7 +47,7 @@
         break;
         case 'Edicion':
         /**----------------Corroboramos que no se duplique el expediente del docente---- */
-        $consulta_comparar = "SELECT id_docentes FROM docentes WHERE id_docentes <> '$id' AND empleados_expediente = '$expediente' AND estatus = '1' LIMIT 1";
+        $consulta_comparar = "SELECT id_docentes FROM docentes WHERE id_docentes <> '$id' AND (empleados_expediente = '$expediente' OR clave = '$clave') AND estatus = '1' LIMIT 1";
         $resultado_comparar = mysqli_query($conexion_database, $consulta_comparar);
         $filas_comparar = mysqli_num_rows($resultado_comparar);
 
@@ -132,7 +132,7 @@ while($row = mysqli_fetch_array($registro)){
             <td>'.$clave.'</td>
             <td>'.$nombre.'</td>
             <td align="center">
-                <button type="button" class="btn btn-primary" onclick="Carga_docente('.$id.');">
+                <button type="button" class="btn btn-primary" onclick="Examina_carga_individual('.$id.');">
                     <i class="fa-solid fa-person-chalkboard"></i>
                 </button>
             </td>

@@ -28,7 +28,7 @@
 
     mysqli_free_result($resultado_1);
 
-    $nroLotes = 5;
+    $nroLotes = 10;
     $nroPaginas = ceil($nroProductos/$nroLotes);
     $tabla = '';
     $lista_info = '';
@@ -101,7 +101,7 @@
     }
     /**---------------------------------------------------------- */
     /**Consulta Bd para mostrar registros encontrados------------ */
-    $consulta_2 = "SELECT id_salon AS id, nombre_salon, nombre_edificio FROM salon WHERE nombre_salon LIKE '%$dato%' AND estatus = '1' ORDER BY nombre_salon ASC LIMIT $limit, $nroLotes";
+    $consulta_2 = "SELECT id_salon AS id, nombre_salon, nombre_edificio FROM salon WHERE nombre_salon LIKE '%$dato%' AND estatus = '1' ORDER BY nombre_edificio, nombre_salon ASC LIMIT $limit, $nroLotes";
     $registro_2 = mysqli_query($conexion_database, $consulta_2);
     $no_filas = mysqli_num_rows($registro_2);
     /**---------------------------------------------------------- */

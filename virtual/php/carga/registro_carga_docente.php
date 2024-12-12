@@ -77,8 +77,16 @@
     }
     mysqli_free_result($resultado_materia);
   /**---------------------------------------------------------------------------------- */
+  /**-----------Seleccionamos el expediente del docente-------------------------------- */
+  $consulta_docente_expediente = "SELECT empleados_expediente FROM docentes WHERE clave = '$clave' AND estatus = '1' LIMIT 1";
+  $resultado_docente_expediente = mysqli_query($conexion_database, $consulta_docente_expediente);
+  while($reg_docente_expediente = mysqli_fetch_array($resultado_docente_expediente)){
+    $expediente = $reg_docente_expediente["empleados_expediente"];
+  }
+  mysqli_free_result($resultado_docente_expediente);
+  /**---------------------------------------------------------------------------------- */
   $separa = explode("_",$punto); $dia_real= $separa[0]; $fila_real = $separa[1]; $columna_real = $separa[2];
-  $separa_2 = explode("-",$hora); $hora_entrada = $separa_2[0]; $hora_salida = $separa_2[1];
+  $separa_2 = explode("-",$hora); $hora_entrada = date("H:i:s", strtotime($separa_2[0])); $hora_salida = date("H:i:s", strtotime($separa_2[1]));
 
   if($dia_real=="lu"){$dia="LUNES";}
   if($dia_real=="ma"){$dia="MARTES";}
@@ -93,6 +101,7 @@
   //Renombramos la etiqueta del grupo compacto para mostrar
 
   $etiqueta = $etiqueta_salon.'-'.$siglas;
+  
 
   switch ($proceso){
     case 'Registro':
@@ -107,9 +116,9 @@
       /**--Insertamos registros si no hay datos duplicados-------------------------------------- */
         if($filas_comparar == 0){
           $inserta = "INSERT INTO detalle_carga(carga_idcarga, salon_idsalon, grupo_idgrupo, materia_idmateria, 
-          clave_docente, nombre_salon, nombre_grupo, nombre_materia, dia, hora_entrada, hora_salida,
+          clave_docente, expediente_docente, nombre_salon, nombre_grupo, nombre_materia, dia, hora_entrada, hora_salida,
           etiqueta, columna, punto, estatus, fecha_movimiento, ultimo_movimiento, usuario_movimiento)VALUES('$carga_idcarga',
-          '$salon_idsalon','$grupo_idgrupo','$materia_idmateria','$clave','$nombre_salon','$nombre_grupo','$nombre_materia',
+          '$salon_idsalon','$grupo_idgrupo','$materia_idmateria','$clave', '$expediente','$nombre_salon','$nombre_grupo','$nombre_materia',
           '$dia','$hora_entrada','$hora_salida','$etiqueta','$columna','$punto','$estatus','$fecha','$proceso','$usuario')";
           $proceso_insert = mysqli_query($conexion_database, $inserta);
         }else{
@@ -129,7 +138,7 @@
 
       /**Actualizamos registro si no hay datos duplicados--------------------------------------- */
         if($filas_comparar == 0){
-          $actualiza="UPDATE detalle_carga SET carga_idcarga = '$carga_idcarga', salon_idsalon = '$salon_idsalon', grupo_idgrupo = '$grupo_idgrupo', materia_idmateria = '$materia_idmateria', clave_docente = '$clave', nombre_salon = '$nombre_salon', nombre_grupo = '$nombre_grupo', nombre_materia = '$nombre_materia', dia = '$dia', hora_entrada = '$hora_entrada', hora_salida = '$hora_salida', etiqueta = '$etiqueta', columna = '$columna', punto = '$punto', estatus = '$estatus', fecha_movimiento = '$fecha', ultimo_movimiento = '$proceso', usuario_movimiento = '$usuario' WHERE iddetalle_carga = '$id' AND carga_idcarga='$carga_idcarga' LIMIT 1";
+          $actualiza="UPDATE detalle_carga SET carga_idcarga = '$carga_idcarga', salon_idsalon = '$salon_idsalon', grupo_idgrupo = '$grupo_idgrupo', materia_idmateria = '$materia_idmateria', clave_docente = '$clave', expediente_docente = '$expediente', nombre_salon = '$nombre_salon', nombre_grupo = '$nombre_grupo', nombre_materia = '$nombre_materia', dia = '$dia', hora_entrada = '$hora_entrada', hora_salida = '$hora_salida', etiqueta = '$etiqueta', columna = '$columna', punto = '$punto', estatus = '$estatus', fecha_movimiento = '$fecha', ultimo_movimiento = '$proceso', usuario_movimiento = '$usuario' WHERE iddetalle_carga = '$id' AND carga_idcarga='$carga_idcarga' LIMIT 1";
           $resultado_actualiza=mysqli_query($conexion_database, $actualiza);
         }else{
           $comprobacion = "1";
