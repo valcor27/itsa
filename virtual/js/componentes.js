@@ -1,3 +1,48 @@
+/*Funcion que va a manipular el sidebar ------------------------*/
+function toggleMenu(){
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleButton = document.getElementById("toggleAsideButton");
+        const sidenavMain = document.getElementById("sidenav-main");
+        const btnMenuResponsive = document.getElementById("_toggle");
+        // Lógica para pantallas pequeñas
+        if (btnMenuResponsive && sidenavMain) {
+            // En pantallas pequeñas, asignamos el evento de clic para alternar el menú
+            btnMenuResponsive.addEventListener("click", function() {
+                sidenavMain.classList.toggle("show");
+                btnMenuResponsive.classList.toggle("close");
+            });
+        }
+
+        // Lógica para pantallas grandes (ancho >= 992px)
+        if (toggleButton && sidenavMain) {
+            // En pantallas grandes no es necesario alternar el menú con el botón
+            toggleButton.addEventListener("click", function() {
+                sidenavMain.classList.toggle("collapsed");
+                console.log("Boton cliqueado");
+            });
+        }
+    });
+};
+toggleMenu();
+/**------------------------------------------------------------ */
+
+/**Funcion para mostrar u ocultar la contraseña de inicio de sesion */
+function togglePasswordInicio(){
+    const passwordField = document.getElementById('contrasena');
+    const toggleIcon = document.getElementById('togglePassword');
+
+    //Alternar el tipo de input entre password y text
+    if(passwordField.type === 'password'){
+        passwordField.type = 'text';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    }else{
+        passwordField.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    }
+};
+/***--------------------------------------------------------------- */
 /**Funcion para solo aceptar solo numeros en el input---------- */
 function Solo_numeros(){
     $(".solonumeros").keydown(function(event){
@@ -4656,7 +4701,7 @@ function Pagination_detalles_pago(partida){
                 $('#buscar_detalle_pago')[0].reset();
             }*/
             return false;
-        }        
+        }
     });
     return false;
 };
@@ -4745,136 +4790,216 @@ function Registrar_detalle_pago(){
 }
 /**------------------------------------------------------------------------ */
 /*Funcion para manejar el Registro/Eliminacion de los PE de detalle de pagos */
-function Manejar_pe_detalle_pago(id_pago, isChecked){
+function Manejar_pe_detalle_pago(id_pago, isChecked) {
     var url = $('#form_pe_pagos').attr('action');
     var mensaje = isChecked ? "Registrar los P.E.?" : "Eliminar los P.E.?";
     var confirmText = isChecked ? "Confirmar!" : "Confirmar!";
     var nuevoEstado = isChecked ? 0 : 1;
-    swal({
+
+    Swal({
         title: mensaje,
         text: "El registro se modificará de forma permanente.",
-        type: "warning",
+        icon: "warning", // Cambiado de 'type' a 'icon'
         showCancelButton: true,
         confirmButtonColor: "#DD6D55",
         confirmButtonText: confirmText,
-        cancelButtonText: "Cancelar",
-        closeOnConfirm: false,
-        closeOnCancel: false
-    }, function(isConfirm){
-        if(isConfirm){
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
             $.ajax({
                 type: 'POST',
                 url: url,
-                data:{id_pago: id_pago, nuevoEstado: nuevoEstado},
-                success:function(data){
+                data: { id_pago: id_pago, nuevoEstado: nuevoEstado },
+                success: function(data) {
                     var respuesta = JSON.parse(data);
-                    if(respuesta[0] == 0){
+                    if (respuesta[0] == 0) {
                         Pagination_pagos(1);
-                        swal({
+                        Swal({
                             title: "Proceso Terminado",
-                            text: "Registro Modificaco con Éxito",
-                            type: "success",
+                            text: "Registro Modificado con Éxito",
+                            icon: "success", // Cambiado de 'type' a 'icon'
                             showConfirmButton: false,
                             timer: 1500
                         });
-                        return false;
-                    }else{
-                        swal("Ocurrió un error", "Inténtelo Nuevamente", "error");
-                        return false;
+                    } else {
+                        Swal("Ocurrió un error", "Inténtelo nuevamente", "error");
                     }
+                },
+                error: function() {
+                    Swal("Error", "No se pudo completar la solicitud", "error");
                 }
             });
-        }else{
-            //para detener la ejecucion del proceso y que no se termine de habilitar o deshabilitar el check
-            //$('#pe_input').attr('checked', !isChecked);
+        } else {
             Pagination_pagos(1);
-            swal("Proceso Cancelado", "No se ha efectuado ningún cambio", "error");
-        }
-    });  
-    return false;
-};
-/**------------------------------------------------------------------------- */
-/**----------Funcion para traer los departamentos de estructura organica--- */
-function Paginacion_departamento_detalle_pago(partida){
-    var url = $('#url_paginar_departamentos').val();
-    $.ajax({
-        type: 'POST',
-        url: url, 
-        data:{partida:partida},
-        success:function(cachetoncito){
-            $('#departamento_select_departamento').html(cachetoncito);
-            return false;
+            Swal("Proceso Cancelado", "No se ha efectuado ningún cambio", "info");
         }
     });
     return false;
 };
 /**------------------------------------------------------------------------ */
-/**----------Función para actualiza/modificar el Detalle de pago----------- */
-function Actualizar_detalle_pago(id){
-    $('#form_detalle_pago')[0].reset();
-    $('#x_pago').val('');
-    var url = $('#url_modificar').val();
+/**----------Funcion para paginar los ejercicios fiscales------------------ */
+function Pagination_ejercicio_fiscal(partida){
+    var url = $('#url_ejercicio_fiscal').val();
     $.ajax({
         type: 'POST',
         url: url,
-        data:{id:id},
+        data: {partida:partida},
+        success:function(cachetoncito){
+            //Limpiar las opciones del select
+            $('#ejercicio_fiscal').empty();
+            //Añadir las nuevas opciones
+            $('#ejercicio_fiscal').append(cachetoncito);
+            //Volver a iniciar el selectpicker
+            // Aquí se puede intentar 'destroy' y luego volver a inicializar para evitar problemas con duplicados
+            $('#ejercicio_fiscal').selectpicker('destroy').selectpicker();
+            return false;
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log("Error en la solicitud AJAX: " + textStatus + " - " + errorThrown);
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**----Funcion para obtener la paginacion de los ejercicios fiscales -------*/
+function Pagination_historico_documentos(partida) {
+    var url = $('#url_paginar').val();
+    var anio = $('#ejercicio_fiscal').val();
+    if (!url || !anio) {
+        swal({
+            type: 'warning',
+            title: 'Datos incompletos',
+            text: 'Asegúrate de seleccionar un ejercicio fiscal correctamente.',
+        })
+        return false;
+    }
+    
+    // Muestra el cargando
+    swal({
+        title: 'Cargando...',
+        allowOutsideClick: false,
+        showConfirmButton: false,  // Oculta el botón de confirmación
+        text: 'Por favor espera...',
+    });
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { partida: partida, anio: anio },
+        dataType: 'json',
+        success: function (bebelogan) {
+            setTimeout(() => {
+                // Cambiar el contenido de la alerta de "Cargando..." a la de éxito
+                swal({
+                    type: "success",
+                    title: "Registros encontrados",
+                    text: 'Los registros han sido cargados exitosamente.',
+                    showConfirmButton: false,
+                    timer: 1500  // Se cierra automáticamente después de 1.5 segundos
+                });
+
+                var array = eval(bebelogan);
+                if (bebelogan) {
+                    Pagination_ejercicio_fiscal(1);
+                    $('#agrega-registros').html(array[0]);
+                    $('#pagination_info').html(array[1]);
+                    $('#pagination').html(array[2]);
+                    $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
+                }
+            }, 1000);
+        },
+        error: function () {
+            setTimeout(() => {
+                // Mostrar un mensaje de error y luego ocultarlo
+                swal({
+                    type: 'error',
+                    title: '¡Error!',
+                    text: 'Hubo un problema al procesar tu solicitud. Intenta nuevamente.',
+                    confirmButtonText: 'Cerrar'
+                });
+            }, 1000);
+        }
+    });
+
+    return false;
+}
+
+
+/**------------------------------------------------------------------------ */
+/***Descargar documentos--------------------------------------------------- */
+function Descargar_documento_h(id, anio) {
+    var url = $('#url_descargar_documento_h').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { id: id, anio:anio},
+        success: function (data) {
+            if (data !== '') {
+                // Construir la URL de descarga directa
+                var url = '/itsa/virtual/documentos/' + data;
+                //window.location.href = url;
+                window.open(url, '_blank');
+            } else {
+                console.log("No se pudo obtener el nombre del archivo.");
+            }
+        },
+        error: function(error){
+            // Manejar el error aquí
+            console.error("Error en la solicitud Ajax:", error);
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ */
+/**---------------------------Historial documentos---------------------------- */
+function Historial_documento_h(id, anio){
+    var url = $('#url_historial_documento_h').val();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data:{id:id, anio:anio},
         success:function(data){
-            var pamesitha = JSON.parse(data);
-            $('#aler_detalle_pago').hide();
-            $('#proceso_detalle_pago').val('Edicion');
-            $('#id_detalle_pago').val(pamesitha[0]);
-            $('#id_departamentos').selectpicker('val', pamesitha[1]).change();
-            $('#monto_detalle_pago').val(pamesitha[2]);
-            $('#x_pago').val(pamesitha[3]);
-            $('#btn_agregar_detalle_pago').hide();
-            $('#btn_actualizar_detalle_pago').show();
-            $('#modal_detalle_pagos_label').html("Actualizar Detalle Pago");
-            $('#modal_detalle_pagos').modal('show');
+            var valcor = JSON.parse(data);
+            $('#historial_documentos_table').html(valcor[0]);
+            $('#modal_historial_documento_label').html("Historial de Movimientos");
+            $('#modal_historial_documento').modal('show');
+        }
+    });
+    return false;
+};
+/**------------------------------------------------------------------------ 
+function Historial_documento_timeline(id, anio){
+    $('#contenido_pagina').load("modulos/historico_historial_documento.php", function Detalle_procesado_pago(){
+        var url = "php/historico_documentos/consulta_historial_documento.php";
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data:{id: id, anio:anio},
+            success:function(data){
+                var polarcito = JSON.parse(data);
+                $('#detalle_del_historial').html(polarcito[0]);
+                $('#x_id_historial').val(polarcito[1]);
+                $('#x_anio_historial').val(polarcito[2]);
+                Pagination_historial_timeline();//llamamos a la funcion para que cargue cuando ya exista el valor de x_pago
+                return false;
+            }
+        });
+    });
+    return false;
+};/*
+function Pagination_historial_timeline(){
+    var url = $('#url_paginar').val();
+    var id = $('#x_id_historial').val();
+    var anio = $('#x_anio_historial').val();
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{id:id, anio:anio},
+        success:function(data){
+            var array = eval(data);
+            $('#agrega-registros').html(array[0]);
             return false;
         }
     });
     return false;
-};
-/**------------------------------------------------------------------------ */
-/**------------Función para eliminar el detalle de pago-------------------- */
-function Eliminar_detalle_pago(ideliminar){
-    var url = $('#url_paginar').val();
-    var partida = '1';
-    var id_pago = '0';
-    swal({
-        title: "Eliminar Detalle de Pago?",
-        text: "El registro se eliminara de forma permanente!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Confirmar!",
-        closeOnConfirm: false,
-        closeOnCancel: false,
-        cancelButtonText: "Cancelar"
-    },
-    function(isConfirm){
-        if(isConfirm){
-            $.ajax({
-                type: 'POST',
-                url:url,
-                data:{ideliminar:ideliminar, partida:partida, id_pago:id_pago},
-                success:function(data){
-                    var pachito = JSON.parse(data);
-                    Pagination_detalles_pago(1);
-                    swal({
-                        title: 'Proceso Terminado',
-                        text: 'Registro Eliminado con Éxito',
-                        type: 'success',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    return false;
-                }
-            });
-        }else{
-            swal("Proceso Cancelado", "No se ha efectuado ningún cambio.", "error");
-        }
-    });
-    return false;
-};
-/**------------------------------------------------------------------------ */
+};*/

@@ -1,20 +1,20 @@
-<?php  
+<?php
 require 'php/sesion/logueo.php';
-if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
+if ($nivel_sesion == 1 && $estructura_real == 10000) {/* DG*/ ?>
 	<li class="list-header">INICIO</li>
 	<li class="nav-item">
 		<a href="index.php" id="jsp_inicio" class="nav-link active">
 			<i class="fa-solid fa-house-chimney"></i>
 			<span class="menu-title">Inicio</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-header">DASHBOARD</li>
 	<li class="nav-item">
 		<a href="#" id="jsp_dash_dg" class="nav-link">
 			<i class="fa-solid fa-chart-line"></i>
 			<span class="menu-title">Dashboard</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider-sdd"></li>
 	<li class="list-header">SUBDIRECCIÓN DE SERVICIOS ADMINISTRATIVOS</li>
 	<li class="nav-item">
@@ -22,28 +22,28 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 			<i class="fa-solid fa-chart-line"></i>
 			<span class="menu-title">Dashboard</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider"></li>
 	<li class="nav-item">
 		<a href="#" id="jsp_usuarios_ssa" class="nav-link">
 			<i class="fa-regular fa-user"></i>
 			<span class="menu-title">Usuarios</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider"></li>
 	<li class="nav-item">
 		<a href="#" id="jsp_documentos" class="nav-link">
 			<i class="fa-solid fa-file-lines"></i>
 			<span class="menu-title">Documentos</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider"></li>
 	<li class="nav-item">
 		<a href="#" id="jsp_catalogo_comisiones" class="nav-link">
 			<i class="fa-solid fa-route"></i>
 			<span class="menu-title">Comisiones Realizadas</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider"></li>
 	<li class="list-header">Departamento de Personal</li>
 	<li class="nav-item">
@@ -118,7 +118,7 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 	<li class="list-divider"></li>
 	<li class="list-header">Departamento de Recursos Financieros</li>
 	<li class="list-divider"></li>
-	<li class="list-header">Departamento de Recursos Materiales y Servicios</li> 
+	<li class="list-header">Departamento de Recursos Materiales y Servicios</li>
 	<li class="nav-item">
 		<a href="#" id="jsp_parque" class="nav-link">
 			<i class="fa-solid fa-car"></i>
@@ -190,14 +190,14 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 	<li class="list-divider"></li>
 	<li class="list-header">División de Ingeniería Mecatrónica</li>
 <?php } ?>
-<?php if($nivel_sesion == 3 && $estructura_real == 10100){ /*SSA*/?>
+<?php if ($nivel_sesion == 3 && $estructura_real == 10100) { /*SSA*/ ?>
 	<li class="list-header">INICIO</li>
 	<li class="nav-item">
 		<a href="index.php" id="jsp_inicio" class="nav-link active">
 			<i class="fa-solid fa-house-chimney"></i>
 			<span class="menu-title">Inicio</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider-sdd"></li>
 	<li class="list-header">SUBDIRECCIÓN DE SERVICIOS ADMINISTRATIVOS</li>
 	<li class="nav-item">
@@ -205,28 +205,35 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 			<i class="fa-solid fa-chart-line"></i>
 			<span class="menu-title">Dashboard</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider"></li>
 	<li class="nav-item">
 		<a href="#" id="jsp_usuarios_ssa" class="nav-link">
 			<i class="fa-regular fa-user"></i>
 			<span class="menu-title">Usuarios</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider"></li>
 	<li class="nav-item">
 		<a href="#" id="jsp_documentos" class="nav-link">
 			<i class="fa-solid fa-file-lines"></i>
 			<span class="menu-title">Documentos</span>
 		</a>
-	</li> 
+	</li>
+	<li class="list-divider"></li>
+	<li class="nav-item">
+		<a href="#" id="jsp_historico_documentos" class="nav-link">
+			<i class="fa-solid fa-clock-rotate-left"></i>
+			<span class="menu-title">Historico Documentos</span>
+		</a>
+	</li>
 	<li class="list-divider"></li>
 	<li class="nav-item">
 		<a href="#" id="jsp_catalogo_comisiones" class="nav-link">
 			<i class="fa-solid fa-route"></i>
 			<span class="menu-title">Comisiones Realizadas</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider"></li>
 	<li class="list-header">Departamento de Personal</li>
 	<li class="nav-item">
@@ -307,7 +314,7 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 		</a>
 	</li>
 	<li class="list-divider"></li>
-	<li class="list-header">Departamento de Recursos Materiales y Servicios</li> 
+	<li class="list-header">Departamento de Recursos Materiales y Servicios</li>
 	<li class="nav-item">
 		<a href="#" id="jsp_parque" class="nav-link">
 			<i class="fa-solid fa-car"></i>
@@ -337,14 +344,14 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 	</li>
 	<li class="list-divider"></li>
 <?php } ?>
-<?php if($nivel_sesion == 5 && $estructura_real == 10100 || $nivel_sesion == 7 && $estructura_real == 10100){ /*SSA Administrativos*/?>
+<?php if ($nivel_sesion == 5 && $estructura_real == 10100 || $nivel_sesion == 7 && $estructura_real == 10100) { /*SSA Administrativos*/ ?>
 	<li class="list-header">INICIO</li>
 	<li class="nav-item">
 		<a href="index.php" id="jsp_inicio" class="nav-link active">
 			<i class="fa-solid fa-house-chimney"></i>
 			<span class="menu-title">Inicio</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider-sdd"></li>
 	<li class="list-header">SUBDIRECCIÓN DE SERVICIOS ADMINISTRATIVOS</li>
 	<li class="nav-item">
@@ -352,23 +359,23 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 			<i class="fa-regular fa-user"></i>
 			<span class="menu-title">Usuarios</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider"></li>
 	<li class="nav-item">
 		<a href="#" id="jsp_documentos" class="nav-link">
 			<i class="fa-solid fa-file-lines"></i>
 			<span class="menu-title">Documentos</span>
 		</a>
-	</li> 
+	</li>
 <?php } ?>
-<?php if($nivel_sesion == 4 && $estructura_real == 10110 || $nivel_sesion == 5 && $estructura_real == 10110){/*Jefe de departamento Personal & admon*/?>
+<?php if ($nivel_sesion == 4 && $estructura_real == 10110 || $nivel_sesion == 5 && $estructura_real == 10110) {/*Jefe de departamento Personal & admon*/ ?>
 	<li class="list-header">INICIO</li>
 	<li class="nav-item">
 		<a href="index.php" id="jsp_inicio" class="nav-link active">
 			<i class="fa-solid fa-house-chimney"></i>
 			<span class="menu-title">Inicio</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider-sdd"></li>
 	<li class="list-header">Departamento de Personal</li>
 	<li class="nav-item">
@@ -376,14 +383,14 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 			<i class="fa-solid fa-file-lines"></i>
 			<span class="menu-title">Documentos</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider"></li>
 	<li class="nav-item">
 		<a href="#" id="jsp_usuarios_ssa" class="nav-link">
 			<i class="fa-regular fa-user"></i>
 			<span class="menu-title">Usuarios</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider"></li>
 	<li class="nav-item">
 		<a href="#" id="jsp_edificio" class="nav-link">
@@ -448,22 +455,15 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 		</a>
 	</li>
 	<li class="list-divider"></li>
-	<li class="nav-item">
-		<a href="#" id="jsp_pagos" class="nav-link">
-			<i class="fa-solid fa-money-check-dollar"></i>
-			<span class="menu-title">Pagos</span>
-		</a>
-	</li>
-	<li class="list-divider"></li>
 <?php } ?>
-<?php if($nivel_sesion == 4 && $estructura_real == 10130 || $nivel_sesion == 5 && $estructura_real == 10130){/*Jefe de Recursos Materiales y Servicios y administradores*/?>
+<?php if ($nivel_sesion == 4 && $estructura_real == 10130 || $nivel_sesion == 5 && $estructura_real == 10130) {/*Jefe de Recursos Materiales y Servicios y administradores*/ ?>
 	<li class="list-header">INICIO</li>
 	<li class="nav-item">
 		<a href="index.php" id="jsp_inicio" class="nav-link active">
 			<i class="fa-solid fa-house-chimney"></i>
 			<span class="menu-title">Inicio</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider-sdd"></li>
 	<li class="list-header">Departamento de Recursos Materiales y Servicios</li>
 	<li class="nav-item">
@@ -471,7 +471,7 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 			<i class="fa-solid fa-file-lines"></i>
 			<span class="menu-title">Documentos</span>
 		</a>
-	</li> 	
+	</li>
 	<li class="list-divider"></li>
 	<li class="nav-item">
 		<a href="#" id="jsp_parque" class="nav-link">
@@ -494,22 +494,15 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 		</a>
 	</li>
 	<li class="list-divider"></li>
-	<li class="nav-item">
-		<a href="#" id="jsp_pagos" class="nav-link">
-			<i class="fa-solid fa-money-check-dollar"></i>
-			<span class="menu-title">Pagos</span>
-		</a>
-	</li>
-	<li class="list-divider"></li>
 <?php } ?>
-<?php if($nivel_sesion == 4 && $estructura_real == 10120 || $nivel_sesion == 5 && $estructura_real == 10120 || $nivel_sesion == 7 && $estructura_real == 10120){/*Jefe de Financieros y administrativos*/?>
+<?php if ($nivel_sesion == 4 && $estructura_real == 10120 || $nivel_sesion == 5 && $estructura_real == 10120) {/*Jefe de Financieros y administrativos*/ ?>
 	<li class="list-header">INICIO</li>
 	<li class="nav-item">
 		<a href="index.php" id="jsp_inicio" class="nav-link active">
 			<i class="fa-solid fa-house-chimney"></i>
 			<span class="menu-title">Inicio</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider-sdd"></li>
 	<li class="list-header">Departamento de Recursos Financieros</li>
 	<li class="nav-item">
@@ -517,37 +510,23 @@ if($nivel_sesion == 1 && $estructura_real == 10000){/* DG*/ ?>
 			<i class="fa-solid fa-file-lines"></i>
 			<span class="menu-title">Documentos</span>
 		</a>
-	</li> 
-	<li class="list-divider"></li>
-	<li class="nav-item">
-		<a href="#" id="jsp_pagos" class="nav-link">
-			<i class="fa-solid fa-money-check-dollar"></i>
-			<span class="menu-title">Pagos</span>
-		</a>
 	</li>
 	<li class="list-divider"></li>
 <?php } ?>
-<?php if($nivel_sesion == 5 && $estructura_real == 10140 || $nivel_sesion == 7 && $estructura_real == 10140){/*dep compras y administrativos y docentes*/?>
+<?php if ($nivel_sesion == 5 && $estructura_real == 10140 || $nivel_sesion == 7 && $estructura_real == 10140) {/*dep compras y administrativos y docentes*/ ?>
 	<li class="list-header">INICIO</li>
 	<li class="nav-item">
 		<a href="index.php" id="jsp_inicio" class="nav-link active">
 			<i class="fa-solid fa-house-chimney"></i>
 			<span class="menu-title">Inicio</span>
 		</a>
-	</li> 
+	</li>
 	<li class="list-divider-sdd"></li>
 	<li class="list-header">Departamento de Compras</li>
 	<li class="nav-item">
 		<a href="#" id="jsp_documentos" class="nav-link">
 			<i class="fa-solid fa-file-lines"></i>
 			<span class="menu-title">Documentos</span>
-		</a>
-	</li> 
-	<li class="list-divider"></li>
-	<li class="nav-item">
-		<a href="#" id="jsp_pagos" class="nav-link">
-			<i class="fa-solid fa-money-check-dollar"></i>
-			<span class="menu-title">Pagos</span>
 		</a>
 	</li>
 	<li class="list-divider"></li>

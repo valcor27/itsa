@@ -106,4 +106,9 @@ $(document).ready(function(){
         $('#html,body').animate({scrollTop: 0}, 'slow');
         $('#aside_menu_cp').offcanvas('toggle');
     });
+    $('#jsp_historico_documentos').click(function(){
+        $('#contenido_pagina').load('modulos/historico_documentos.php');
+        $('html,body').animate({scrollTop: 0}, 'slow');
+        $('#aside_menu_cp').offcanvas('toggle');
+    });
 });
