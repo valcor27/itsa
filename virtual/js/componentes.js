@@ -4865,12 +4865,14 @@ function Pagination_ejercicio_fiscal(partida){
 function Pagination_historico_documentos(partida) {
     var url = $('#url_paginar').val();
     var anio = $('#ejercicio_fiscal').val();
+    var inputBuscar = $('#inputBuscar').val();
     if (!url || !anio) {
-        swal({
+        /*swal({
             type: 'warning',
             title: 'Datos incompletos',
             text: 'Asegúrate de seleccionar un ejercicio fiscal correctamente.',
-        })
+        })*/
+        $('#alert_vacio_ejercicio').show();
         return false;
     }
     
@@ -4885,28 +4887,29 @@ function Pagination_historico_documentos(partida) {
     $.ajax({
         type: 'POST',
         url: url,
-        data: { partida: partida, anio: anio },
+        data: { partida: partida, anio: anio, inputBuscar: inputBuscar},
         dataType: 'json',
         success: function (bebelogan) {
-            setTimeout(() => {
-                // Cambiar el contenido de la alerta de "Cargando..." a la de éxito
-                swal({
-                    type: "success",
-                    title: "Registros encontrados",
-                    text: 'Los registros han sido cargados exitosamente.',
-                    showConfirmButton: false,
-                    timer: 1500  // Se cierra automáticamente después de 1.5 segundos
-                });
-
-                var array = eval(bebelogan);
-                if (bebelogan) {
-                    Pagination_ejercicio_fiscal(1);
-                    $('#agrega-registros').html(array[0]);
-                    $('#pagination_info').html(array[1]);
-                    $('#pagination').html(array[2]);
+            if (bebelogan && bebelogan.length) {
+                setTimeout(() => {
+                    $('#alert_vacio_ejercicio').hide();
+                    $('#agrega-registros').html(bebelogan[0]);
+                    $('#pagination_info').html(bebelogan[1]);
+                    $('#pagination').html(bebelogan[2]);
+                    $('#inputBuscar').prop("disabled", false);
+                
+                    // Cambiar el contenido de la alerta de "Cargando..." a la de éxito
+                    swal({
+                        type: "success",
+                        title: "Registros encontrados",
+                        text: 'Los registros han sido cargados exitosamente.',
+                        showConfirmButton: false,
+                        timer: 1500  // Se cierra automáticamente después de 1.5 segundos
+                    });
                     $('[data-bs-toggle="tooltip"]').tooltip(); // Inicializa todos los tooltips
-                }
-            }, 1000);
+                    
+                }, 1000);
+            }
         },
         error: function () {
             setTimeout(() => {

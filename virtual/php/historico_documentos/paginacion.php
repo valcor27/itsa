@@ -5,18 +5,42 @@
 
    $paginaActual = $_POST['partida'];
    $anio = isset($_POST['anio']) ? $_POST['anio'] : null;
-   
+   $inputBuscar = isset($_POST['inputBuscar']) ? $_POST['inputBuscar'] : null;
+
+   // Comprobar si el input es una fecha válida en formato 'dd-mm-yyyy'
+   $isDate = false;
+   $dateFormat = 'd-m-Y';
+   $fecha = DateTime::createFromFormat($dateFormat, $inputBuscar);
+   if ($fecha && $fecha->format($dateFormat) === $inputBuscar) {
+      $isDate = true;
+   }
+
+   // Preparar la consulta base
    $consulta_1 = "SELECT id_historico FROM historico_documentos WHERE anio_historico = '$anio'";
+
+   // Condición para comparar con fecha_creacion si es una fecha válida
+   if ($isDate) {
+      // Convertir la fecha al formato de la base de datos (YYYY-MM-DD)
+      $fechaDB = $fecha->format('Y-m-d');
+      $consulta_1 .= " AND fecha_creacion = '$fechaDB'";
+   } else {
+      // Si no es una fecha, realizar la búsqueda por folio o asunto
+      $consulta_1 .= " AND (folio LIKE '%$inputBuscar%' OR asunto LIKE '%$inputBuscar%')";
+   }
    $resultado_1 = mysqli_query($conexion_database, $consulta_1);
    $nrpProductos = mysqli_num_rows($resultado_1);
    mysqli_free_result($resultado_1);
+
+   $nroLotes = 10;
+   $nroPaginas = ceil($nrpProductos / $nroLotes);
    $tabla = '';
    $lista_info = '';
    $lista = '';
-   $nroLotes = 10;
-   $nroPaginas = ceil($nrpProductos/$nroLotes);
+   
+   
    $min = $paginaActual - ($paginaActual % 5) + 1;
    if($min > $paginaActual){$min=$min-5;}
+
    $max = $min + 4 > $nroPaginas ? $nroPaginas : $min + 4;
    /*-----Lista de información de paginas--------------------------------------------------------------------------*/
    $lista_info = $lista_info . ' Pag. ' . $paginaActual . ' / ' . $nroPaginas . ' ';
@@ -114,7 +138,21 @@
    }
 
    /**------------------------------------------------------------------------------------------------------------ */
-   $consulta_2 = "SELECT id_documento, anio_historico, folio, tipo_doc, ff, asunto, nombre_documento FROM historico_documentos WHERE anio_historico = '$anio'";
+   // Preparar la consulta base
+   $consulta_2 = "SELECT id_documento, anio_historico, folio, tipo_doc, ff, asunto, nombre_documento, fecha_creacion
+                  FROM historico_documentos
+                  WHERE anio_historico = '$anio'";
+
+   // Condición para comparar con fecha_creacion si es una fecha válida
+   if ($isDate) {
+      // Convertir la fecha al formato de la base de datos (YYYY-MM-DD)
+      $fechaDB = $fecha->format('Y-m-d');
+      $consulta_2 .= " AND fecha_creacion = '$fechaDB'";
+   } else {
+      // Si no es una fecha, realizar la búsqueda por folio o asunto
+      $consulta_2 .= " AND (folio LIKE '%$inputBuscar%' OR asunto LIKE '%$inputBuscar%')";
+   }
+   $consulta_2 .= "ORDER BY id_documento DESC LIMIT $limit, $nroLotes";
    $registro_2 = mysqli_query($conexion_database, $consulta_2);
    $no_filas = mysqli_num_rows($registro_2);
    $tabla = '<div class="table-responsive">
@@ -122,9 +160,10 @@
    $tipo_documento="";
    if($no_filas > 0){
       $tabla .= '<thead>
-                  <tr> 
+                  <tr>
                         <th><i class="fa-solid fa-gear"></i></th>
                         <th>Ejercicio Fiscal</th>
+                        <th>Realizado el</th>
                         <th>Folio</th>
                         <th>Asunto</th>
                         <th>Tipo de Doc.</th>
@@ -141,6 +180,7 @@
          $ff = $row["ff"];
          $asunto = $row["asunto"];
          $nombre_doc = $row["nombre_documento"];
+         $fecha_creacion = date("d-m-Y", strtotime($row["fecha_creacion"]));
          if($tipo == 1){
             $tipo_documento = "Oficio Circular"; 
          }else if($tipo == 2){
@@ -169,16 +209,11 @@
                <i class="fa-solid fa-box-archive"></i>
             </button>
          ';
-         $button_timeline = '
-            <button type="button" class="btn btn-success" onclick="return Historial_documento_timeline('.$id.', '.$anio.');">
-               <i class="fa-solid fa-box-archive"></i>
-            </button>
-         ';
-
          $tabla .= '
             <tr>
                <td align="center">'.$button_historial.' '.$valor_archivo.'</td>
                <td>' . $e_fiscal . '</td>
+               <td>' . $fecha_creacion . '</td>
                <td>' . $folio . '</td>
                <td>' . $asunto . '</td>
                <td>' . $tipo_documento . '</td>

@@ -27,12 +27,28 @@
                               </div>
                            </div>
                            <div class="row justify-content-between">
-                              <div class="col-xs-10 col-sm-10 col-md-6 col-lg-4">
-                                 <form id="buscar" name="buscar">
-                                    <div class="input-group mb-3 ps-3" id="select_ejercicio_fiscal_historico">
-                                       <span class="input-group-text"><i class="fa-regular fa-calendar-days"></i></span>
-                                       <select class="selectpicker form-control" title="Selecciona un Ejercicio Fiscal" data-live-search="true" name="ejercicio_fiscal" id="ejercicio_fiscal" required="" onchange="return Pagination_historico_documentos(1);"></select>
-                                       <!--<button class="btn btn-outline-light" type="submit" id="button-addon2">Buscar</button>-->
+                              <div class="col">
+                                 <form id="buscar" name="buscar" onsubmit=" return Pagination_historico_documentos(1);">
+                                    <div class="row justify-content-center align-items-center">
+                                       <div class="col">
+                                          <div class="input-group mb-3 ps-3" id="select_ejercicio_fiscal_historico">
+                                             <span class="input-group-text"><i class="fa-regular fa-calendar-days"></i></span>
+                                             <select class="selectpicker form-control" title="Selecciona un Ejercicio Fiscal" data-live-search="true" name="ejercicio_fiscal" id="ejercicio_fiscal" required="" onchange="return Pagination_historico_documentos(1);"></select>
+                                          </div>
+                                       </div>
+                                       <div class="col">
+                                          <div class="input-group mb-3 ps-3" id="select_ejercicio_fiscal_historico">
+                                             <input type="text" id="inputBuscar" class="form-control" placeholder="Buscar por folio, asunto o fecha" disabled>
+                                             <button class="btn btn-outline-light" id="datepickerToggle" type="button">
+                                                <i class="fa-solid fa-calendar-day"></i>
+                                             </button>
+                                          </div>
+                                       </div>
+                                       <div class="col">
+                                          <div class="mb-3 ps-3">
+                                             <button class="btn btn-outline-light" type="submit" id="button-addon2">Buscar</button>
+                                          </div>
+                                       </div>
                                     </div>
                                  </form>
                               </div>
@@ -135,6 +151,34 @@
    <script>
       $(document).ready(function() {
          Pagination_ejercicio_fiscal(1);
+         Pagination_historico_documentos(1);
+         //inicializar el datepicker
+         $("#inputBuscar").datepicker({
+            language: 'es',
+            format: 'dd-mm-yyyy',
+            autoclose: true,
+            clearBtn: true,
+            todayHighlight: true,
+            showOnFocus: false,
+         });
+         //mostrar datepicker al hacer clic en el boton
+         $('#datepickerToggle').on('click', function() {
+            $('#inputBuscar').datepicker('show');
+         });
+         //deshabilitar datepicker temporalmente al escribir o pegar
+         $("#inputBuscar").on('keydown paste', function(){
+            $(this).datepicker('destroy'); //desactiva temporalmente el datepicker
+         });
+         $("#inputBuscar").on('blur', function(){
+               $(this).datepicker({
+               language: 'es',
+               format: 'dd-mm-yyyy',
+               autoclose: true,
+               clearBtn: true,
+               todayHighlight: true,
+               showOnFocus: false,
+            });
+         });
       });
    </script>
 </body>
