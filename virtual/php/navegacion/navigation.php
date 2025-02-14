@@ -367,6 +367,13 @@ if ($nivel_sesion == 1 && $estructura_real == 10000) {/* DG*/ ?>
 			<span class="menu-title">Documentos</span>
 		</a>
 	</li>
+	<li class="list-divider"></li>
+	<li class="nav-item">
+		<a href="#" id="jsp_historico_documentos" class="nav-link">
+			<i class="fa-solid fa-clock-rotate-left"></i>
+			<span class="menu-title">Historico Documentos</span>
+		</a>
+	</li>
 <?php } ?>
 <?php if ($nivel_sesion == 4 && $estructura_real == 10110 || $nivel_sesion == 5 && $estructura_real == 10110) {/*Jefe de departamento Personal & admon*/ ?>
 	<li class="list-header">INICIO</li>
@@ -495,7 +502,7 @@ if ($nivel_sesion == 1 && $estructura_real == 10000) {/* DG*/ ?>
 	</li>
 	<li class="list-divider"></li>
 <?php } ?>
-<?php if ($nivel_sesion == 4 && $estructura_real == 10120 || $nivel_sesion == 5 && $estructura_real == 10120) {/*Jefe de Financieros y administrativos*/ ?>
+<?php if ($nivel_sesion == 4 && $estructura_real == 10120 || $nivel_sesion == 5 && $estructura_real == 10120 || $nivel_sesion == 7 && $estructura_real == 10120) {/*Jefe de Financieros y administrativos*/ ?>
 	<li class="list-header">INICIO</li>
 	<li class="nav-item">
 		<a href="index.php" id="jsp_inicio" class="nav-link active">
@@ -512,8 +519,16 @@ if ($nivel_sesion == 1 && $estructura_real == 10000) {/* DG*/ ?>
 		</a>
 	</li>
 	<li class="list-divider"></li>
+	<li class="nav-item">
+		<a href="#" id="jsp_pagos" class="nav-link">
+			<i class="fa-solid fa-money-check-dollar"></i>
+			<span class="menu-title">Pagos</span>
+		</a>
+	</li>
 <?php } ?>
-<?php if ($nivel_sesion == 5 && $estructura_real == 10140 || $nivel_sesion == 7 && $estructura_real == 10140) {/*dep compras y administrativos y docentes*/ ?>
+<?php /*if ($nivel_sesion == 5 && $estructura_real == 10140 || $nivel_sesion == 7 && $estructura_real == 10140) {se modifico esta linea porque la mtra angelica es la unica que entrase manejara por su id*/ 
+	if($id_software_sesion == '100117'){
+?>
 	<li class="list-header">INICIO</li>
 	<li class="nav-item">
 		<a href="index.php" id="jsp_inicio" class="nav-link active">
@@ -529,5 +544,10 @@ if ($nivel_sesion == 1 && $estructura_real == 10000) {/* DG*/ ?>
 			<span class="menu-title">Documentos</span>
 		</a>
 	</li>
-	<li class="list-divider"></li>
+	<li class="nav-item">
+		<a href="#" id="jsp_historico_documentos" class="nav-link">
+			<i class="fa-solid fa-clock-rotate-left"></i>
+			<span class="menu-title">Historico Documentos</span>
+		</a>
+	</li>
 <?php } ?>
